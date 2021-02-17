@@ -1,8 +1,8 @@
 {
   "name": "Fetchq",
   "description": "Fetchq REST API and Console application",
-  "repository": "https://github.com/marcopeg/fetchq-console",
-  "logo": "https://raw.githubusercontent.com/marcopeg/fetchq-console/main/public/fetchq-icon.png",
+  "repository": "https://github.com/fetchq/console",
+  "logo": "https://raw.githubusercontent.com/fetchq/console/main/public/fetchq-icon.png",
   "keywords": ["fetchq", "queue", "tasks", "postgres"],
   "success_url": "/",
   "env": {
