@@ -1,0 +1,63 @@
+{
+  "name": "console",
+  "organization": "fetchq",
+  "version": "0.0.1",
+  "description": "Manage your Fetchq cluster like a PRO",
+  "main": "ssr/index.js",
+  "scripts": {
+    "___// Development Utilities //___": "",
+    "start": "node ssr/index.js",
+    "start:api": "nodemon --watch ssr ssr/index.js",
+    "start:app": "react-scripts start",
+    "start:styleguide": "styleguidist server",
+    "start:gitpod:api": "NODE_ENV=development CORS_ORIGIN=$(gp url 3000) nodemon --watch ssr ssr/index.js",
+    "start:gitpod:app": "REACT_APP_SERVER_URL=$(gp url 8080) react-scripts start",
+    "start:gitpod:styleguide": "HOST=$(gp url 6060) styleguidist server",
+    "start:docker:api": "npm install && nodemon ssr/index.js",
+    "start:docker:app": "npm install && react-scripts start",
+    "start:docker:styleguide": "npm install && styleguidist server",
+    "___// Testing Utilities //___": "",
+    "test": "npm run test:client && npm run test:unit",
+    "test:e2e": "./node_modules/.bin/jest --projects test/templates/e2e --runInBand --testTimeout=10000",
+    "test:unit": "./node_modules/.bin/jest --projects test/templates/unit",
+    "test:client": "react-scripts test --watchAll=false",
+    "tdd:e2e": "./node_modules/.bin/jest --projects test/templates/e2e --runInBand --watchAll --testTimeout=10000",
+    "tdd:unit": "jest --projects test/templates/unit --watchAll",
+    "tdd:client": "react-scripts test",
+    "___// Production Utilities //___": "",
+    "build": "react-scripts build"
+  },
+  "dependencies": {
+    "@forrestjs/package-fastify": "3.19.8",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "envalid": "7.0.0",
+    "http-headers-validation": "0.0.1",
+    "mdi-material-ui": "^6.22.0",
+    "prop-types": "^15.7.2",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.2"
+  },
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "moment": "^2.29.1",
+    "nodemon": "1.18.3",
+    "react-styleguidist": "^11.1.5"
+  },
+  "keywords": [],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Fetchq",
+  "description": "Fetchq REST API and Console application",
+  "repository": "https://github.com/marcopeg/fetchq-console-heroku",
+  "logo": "https://raw.githubusercontent.com/marcopeg/fetchq-heroku/master/assets/fetchq.png",
+  "keywords": ["fetchq", "queue", "tasks", "postgres"],
+  "success_url": "/",
+  "env": {
+    "NODE_ENV": "production",
+    "FETCHQ_CONSOLE_PASSWORD": {
+      "description": "A secret password for logging you into the web console.",
+      "required": false
+    }
+  },
+  "scripts": {
+    "predeploy": "npm run build"
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev"
+    }
+  ]
+}

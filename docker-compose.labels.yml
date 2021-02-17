@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  api:
+    environment:
+      FETCHQ_CORS_ORIGIN: https://fetchq-app.${CODE_SERVER_DNS}
+    labels:
+      - 'traefik.enable=true'
+      # Configure basic HTTP mapping
+      - 'traefik.http.routers.fetchq-api--80.entrypoints=http80'
+      - 'traefik.http.routers.fetchq-api--80.middlewares=csi-redirect'
+      - 'traefik.http.routers.fetchq-api--80.rule=Host(`fetchq-api.${CODE_SERVER_DNS}`)'
+      # Configure HTTPS mapping with automatic Letsencrypt certificate management
+      - 'traefik.http.routers.fetchq-api--443.tls=true'
+      - 'traefik.http.routers.fetchq-api--443.entrypoints=http443'
+      - 'traefik.http.routers.fetchq-api--443.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.fetchq-api--443.rule=Host(`fetchq-api.${CODE_SERVER_DNS}`)'
+
+  app:
+    environment:
+      REACT_APP_SERVER_URL: https://fetchq-api.${CODE_SERVER_DNS}
+    labels:
+      - 'traefik.enable=true'
+      # Configure basic HTTP mapping
+      - 'traefik.http.routers.fetchq-app--80.entrypoints=http80'
+      - 'traefik.http.routers.fetchq-app--80.middlewares=csi-redirect'
+      - 'traefik.http.routers.fetchq-app--80.rule=Host(`fetchq-app.${CODE_SERVER_DNS}`)'
+      # Configure HTTPS mapping with automatic Letsencrypt certificate management
+      - 'traefik.http.routers.fetchq-app--443.tls=true'
+      - 'traefik.http.routers.fetchq-app--443.entrypoints=http443'
+      - 'traefik.http.routers.fetchq-app--443.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.fetchq-app--443.rule=Host(`fetchq-app.${CODE_SERVER_DNS}`)'
+
+  styleguide:
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.services.fetchq-styleguide.loadbalancer.server.port=6060'
+      # Configure basic HTTP mapping
+      - 'traefik.http.routers.fetchq-styleguide--80.entrypoints=http80'
+      - 'traefik.http.routers.fetchq-styleguide--80.middlewares=csi-redirect'
+      - 'traefik.http.routers.fetchq-styleguide--80.rule=Host(`fetchq-styleguide.${CODE_SERVER_DNS}`)'
+      # Configure HTTPS mapping with automatic Letsencrypt certificate management
+      - 'traefik.http.routers.fetchq-styleguide--443.tls=true'
+      - 'traefik.http.routers.fetchq-styleguide--443.entrypoints=http443'
+      - 'traefik.http.routers.fetchq-styleguide--443.tls.certresolver=letsencrypt'
+      - 'traefik.http.routers.fetchq-styleguide--443.rule=Host(`fetchq-styleguide.${CODE_SERVER_DNS}`)'

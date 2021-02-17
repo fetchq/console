@@ -1,0 +1,73 @@
+version: '3.8'
+services:
+  api:
+    image: node:13.10
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - ${HOST_API_PORT:-8080}:8080
+    volumes:
+      - ./.docker-data/api/node_modules:/usr/src/app/node_modules:cached
+      - ./package.json:/usr/src/app/package.json:delegated
+      - ./package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./ssr:/usr/src/app/ssr:delegated
+      - ./build:/usr/src/app/build:delegated
+    environment:
+      NODE_ENV: development
+      PGSTRING: postgres://${PG_DATABASE:-postgres}:${PG_PASSWORD:-postgres}@${PG_HOST:-postgres}:${PG_PORT:-5432}/${PG_DATABASE:-postgres}
+      FETCHQ_CONSOLE_PASSWORD: fetchq
+    working_dir: /usr/src/app
+    entrypoint: ['yarn', 'start:docker:api']
+    healthcheck:
+      test: ['CMD', 'curl', 'localhost:8080/healthz']
+      interval: 5s
+      timeout: 5s
+      retries: 60
+
+  app:
+    image: node:13.10
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - ${FRONTEND_PORT:-3000}:3000
+    volumes:
+      - ./.docker-data/app/node_modules:/usr/src/app/node_modules:cached
+      - ./package.json:/usr/src/app/package.json:delegated
+      - ./package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./public:/usr/src/app/public:delegated
+      - ./src:/usr/src/app/src:delegated
+    environment:
+      REACT_APP_SERVER_URL: http://api
+    working_dir: /usr/src/app
+    entrypoint: ['yarn', 'start:docker:app']
+
+  styleguide:
+    image: node:13.10
+    ports:
+      - ${STYLEGUIDE_HOST_PORT:-6060}:6060
+    volumes:
+      - ./.docker-data/styleguide/node_modules:/usr/src/app/node_modules:cached
+      - ./package.json:/usr/src/app/package.json:delegated
+      - ./package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./src:/usr/src/app/src:delegated
+      - ./styleguide.config.js:/usr/src/app/styleguide.config.js:delegated
+    working_dir: /usr/src/app
+    entrypoint: ['yarn', 'start:docker:styleguide']
+
+  postgres:
+    image: postgres:13.0
+    restart: always
+    ports:
+      - ${PG_HOST_PORT:-5432}:5432
+    volumes:
+      - ./.docker-data/postgres:/var/lib/postgresql/data:consistent
+      - ./.docker-data/backup:/backup:consistent
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 60
