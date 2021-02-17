@@ -1,3 +1,4 @@
+const env = require('./environment');
 const { runHookApp } = require('@forrestjs/hooks');
 
 /**
@@ -10,7 +11,7 @@ const serviceFastifyStatic = require('@forrestjs/service-fastify-static');
 const serviceFastifyCookie = require('@forrestjs/service-fastify-cookie');
 const serviceFastifyJwt = require('@forrestjs/service-fastify-jwt');
 const serviceFastifyFetchq = require('@forrestjs/service-fastify-fetchq');
-const serviceFastifyHealthz = require("@forrestjs/service-fastify-healthz");
+const serviceFastifyHealthz = require('@forrestjs/service-fastify-healthz');
 const serviceTdd = require('./service/service-tdd');
 
 /**
@@ -30,22 +31,14 @@ const { settings } = require('./settings');
 
 // Use the application scope to flag api and workers feature
 // const useApi = String(process.env.FETCHQ_CRON_MODE) !== 'worker';
-const useApi = true;
+const useApi = env.FETCHQ_USE_API;
 // const useWorkers = String(process.env.FETCHQ_CRON_MODE) !== 'api';
 
 // The web console can be disabled in case it's being executed from a CDN (ex CloudFront)
-const useConsole = true;
-// const useConsole =
-//   useApi && String(process.env.FETCHQ_CRON_ENABLE_CONSOLE) !== 'false';
+const useConsole = useApi && env.FETCHQ_USE_API;
 
 // CORS are needed during development to run an external client, or in the
-const useCors = true
-// case the UI should be served from a CDN (ex CloudFront)
-// const useCors =
-//   useApi &&
-//   (String(process.env.FETCHQ_CRON_ENABLE_CORS) === 'true' ||
-//     process.env.NODE_ENV === 'development');
-
+const useCors = useApi && env.FETCHQ_CORS_ENABLED;
 
 runHookApp({
   settings,
@@ -53,11 +46,11 @@ runHookApp({
   services: [
     serviceFetchq,
     ...(useApi ? [serviceFastify] : []),
-    ...(useCors ? [serviceFastifyCors] : []),
-    ...(useConsole ? [serviceFastifyStatic] : []),
     ...(useApi ? [serviceFastifyCookie] : []),
     ...(useApi ? [serviceFastifyJwt] : []),
     ...(useApi ? [serviceFastifyHealthz] : []),
+    ...(useCors ? [serviceFastifyCors] : []),
+    ...(useConsole ? [serviceFastifyStatic] : []),
     // ...(useApi ? [serviceFastifyFetchq] : []),
     serviceTdd,
   ],
@@ -68,7 +61,7 @@ runHookApp({
     ...(useApi ? [featureAuthV1] : []),
     // ...(useWorkers ? [featureWorkersV1] : []),
   ],
-}).catch(err => console.error(err.message));
+}).catch((err) => console.error(err.message));
 
 // Let Docker exit on Ctrl+C
 process.on('SIGINT', () => process.exit());

@@ -1,3 +1,12 @@
+/**
+ * ENVIRONMENT VARIABLES
+ * =====================
+ *
+ * This module has the responsibility to list, document and validate the
+ * environmental variable that regulate the app's behavior.
+ *
+ */
+
 const envalid = require('envalid');
 const { generate: randomPassword } = require('generate-password');
 
@@ -29,12 +38,24 @@ const env = envalid.cleanEnv(process.env, {
   FETCHQ_MAINTENANCE_SLEEP: envalid.num({ default: 1000 }),
 
   // Fetchq App Settings:
-  FETCHQ_CONSOLE_PASSWORD: envalid.str({ default: null }),
+  FETCHQ_CONSOLE_PASSWORD: envalid.str({ default: '' }),
   FETCHQ_AUTH_HEADER_NAME: envalid.str({ default: 'authorization' }),
   FETCHQ_AUTH_QUERY_NAME: envalid.str({ default: 'auth' }),
   FETCHQ_AUTH_COOKIE_NAME: envalid.str({ default: 'auth' }),
   FETCHQ_AUTH_COOKIE_SECRET: envalid.str({ default: getRandomSecret() }),
   FETCHQ_JWT_SECRET: envalid.str({ default: getRandomSecret() }),
+
+  // Service port on which expose the API and the app:
+  FETCHQ_PORT: envalid.num({ default: null }),
+  PORT: envalid.num({ default: null }),
+
+  // CORS Settings
+  FETCHQ_CORS_ENABLED: envalid.bool({ default: false }),
+  FETCHQ_CORS_ORIGIN: envalid.url({ default: 'http://localhost:3000' }),
+
+  // Main feature flags
+  FETCHQ_USE_API: envalid.bool({ default: true }),
+  FETCHQ_USE_CONSOLE: envalid.bool({ default: true }),
 });
 
 module.exports = { ...env };

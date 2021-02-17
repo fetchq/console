@@ -12,8 +12,6 @@
 const path = require('path');
 const env = require('./environment');
 
-console.log(env);
-
 const settings = ({ setConfig, getConfig }) => {
   // TODO: add envalid
 
@@ -46,10 +44,7 @@ const settings = ({ setConfig, getConfig }) => {
   setConfig('app.auth.header.name', env.FETCHQ_AUTH_HEADER_NAME);
 
   // Heroku compatible port environment variable
-  setConfig(
-    'fastify.port',
-    process.env.FETCHQ_PORT || process.env.PORT || '8080',
-  );
+  setConfig('fastify.port', env.FETCHQ_PORT || env.PORT || '8080');
 
   setConfig('fastify.instance.options', {
     logger: false,
