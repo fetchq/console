@@ -6,10 +6,17 @@
   "keywords": ["fetchq", "queue", "tasks", "postgres"],
   "success_url": "/",
   "env": {
-    "NODE_ENV": "production",
     "FETCHQ_CONSOLE_PASSWORD": {
       "description": "A secret password for logging you into the web console.",
       "required": false
+    },
+    "NODE_ENV": {
+      "description": "NodeJS environment, it might affect the amount of logging.",
+      "value": "production"
+    },
+    "PG_USE_SSL": {
+      "description": "Forces Fetchq to connect to the PostgreSQL db using SSL.",
+      "value": "true"
     }
   },
   "scripts": {

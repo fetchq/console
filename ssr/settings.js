@@ -10,7 +10,9 @@
  */
 
 const path = require('path');
-// const { Q1 } = require('./contants');
+const env = require('./environment');
+
+console.log(env);
 
 const settings = ({ setConfig, getConfig }) => {
   // TODO: add envalid
@@ -18,49 +20,30 @@ const settings = ({ setConfig, getConfig }) => {
   // FetchQ Client
   setConfig('fetchq', {
     connectionString:
-      process.env.FETCHQ_PGSTRING || // Explicit setup
-      process.env.DATABASE_URL || // Heroku
-      process.env.PGSTRING || // Default fetchq client
-      'postgres://gitpod:gitpod@localhost:5432/postgres',
+      env.FETCHQ_PGSTRING || // Explicit setup
+      env.DATABASE_URL || // Heroku
+      env.PGSTRING || // Default fetchq client
+      env.GITPOD_PGSTRING,
     pool: {
-      max: 1,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      max: env.PG_POOL_MAX,
+      // needed by Heroku but not locally
+      ...(env.PG_USE_SSL ? { ssl: { rejectUnauthorized: false } } : {}),
     },
-    // maintenance: {
-    //   limit: 1, // TODO: need to update fetchq-client so to avoid maintenance running
-    //   delay: 10,
-    //   sleep: 100,
-    // },
-    // queues: [
-    //   {
-    //     name: Q1,
-    //     isActive: true,
-    //     enableNotifications: true,
-    //     maxAttempts: 5,
-    //     errorsRetention: '1h',
-    //     maintenance: {
-    //       mnt: { delay: '500ms', duration: '5m', limit: 500 },
-    //       sts: { delay: '1h', duration: '5m' },
-    //       cmp: { delay: '30m', duration: '5m' },
-    //       drp: { delay: '10m', duration: '5m' },
-    //     },
-    //   },
-    // ],
+    maintenance: {
+      limit: 1, // TODO: need to update fetchq-client so to avoid maintenance running
+      delay: env.FETCHQ_MAINTENANCE_DELAY,
+      sleep: env.FETCHQ_MAINTENANCE_SLEEP,
+    },
   });
 
   // Generica app configuration
   // setConfig('app.q1.name', Q1);
   setConfig('app.logs.page.size', 100);
   // Authorization setup
-  setConfig(
-    'app.auth.console.password',
-    process.env.FETCHQ_CONSOLE_PASSWORD || null,
-  );
-  setConfig('app.auth.cookie.name', 'fetchq_cron_auth');
-  setConfig('app.auth.query.param', 'auth');
-  setConfig('app.auth.header.name', 'authorization');
+  setConfig('app.auth.console.password', env.FETCHQ_CONSOLE_PASSWORD || null);
+  setConfig('app.auth.cookie.name', env.FETCHQ_AUTH_COOKIE_NAME);
+  setConfig('app.auth.query.param', env.FETCHQ_AUTH_QUERY_NAME);
+  setConfig('app.auth.header.name', env.FETCHQ_AUTH_HEADER_NAME);
 
   // Heroku compatible port environment variable
   setConfig(
@@ -79,7 +62,7 @@ const settings = ({ setConfig, getConfig }) => {
   });
 
   setConfig('fastify.cookie', {
-    secret: 'fetchq-cron', // TODO: move it to an environment variable
+    secret: env.FETCHQ_AUTH_COOKIE_SECRET,
     options: {
       httpOnly: true,
       secure: true,
@@ -88,7 +71,7 @@ const settings = ({ setConfig, getConfig }) => {
   });
 
   setConfig('fastify.jwt', {
-    secret: 'fetchq-cron', // TODO: move it to an environment variable
+    secret: env.FETCHQ_JWT_SECRET,
   });
 
   // TODO: cors should be enabled only on demand
