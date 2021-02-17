@@ -24,6 +24,9 @@ const settings = ({ setConfig, getConfig }) => {
       'postgres://gitpod:gitpod@localhost:5432/postgres',
     pool: {
       max: 1,
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
     // maintenance: {
     //   limit: 1, // TODO: need to update fetchq-client so to avoid maintenance running
