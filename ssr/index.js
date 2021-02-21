@@ -1,4 +1,3 @@
-const env = require('./environment');
 const { runHookApp } = require('@forrestjs/hooks');
 
 /**
@@ -23,21 +22,15 @@ const serviceTdd = require('./service/service-tdd');
 const featureAuthV1 = require('./feature/auth-v1');
 // const featureWorkersV1 = require('./feature/workers-v1');
 
-const { settings } = require('./settings');
+const env = require('./environment');
+const settings = require('./settings');
 
 /**
  * Feature Flags
  */
 
-// Use the application scope to flag api and workers feature
-// const useApi = String(process.env.FETCHQ_CRON_MODE) !== 'worker';
 const useApi = env.FETCHQ_USE_API;
-// const useWorkers = String(process.env.FETCHQ_CRON_MODE) !== 'api';
-
-// The web console can be disabled in case it's being executed from a CDN (ex CloudFront)
 const useConsole = useApi && env.FETCHQ_USE_API;
-
-// CORS are needed during development to run an external client, or in the
 const useCors = useApi && env.FETCHQ_CORS_ENABLED;
 
 runHookApp({

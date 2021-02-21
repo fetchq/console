@@ -12,7 +12,7 @@
 const path = require('path');
 const env = require('./environment');
 
-const settings = ({ setConfig, getConfig }) => {
+module.exports = ({ setConfig, getConfig }) => {
   // TODO: add envalid
 
   // FetchQ Client
@@ -76,5 +76,3 @@ const settings = ({ setConfig, getConfig }) => {
     credentials: true,
   });
 };
-
-module.exports = { settings };
