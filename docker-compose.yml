@@ -13,6 +13,7 @@ services:
       - ./package-lock.json:/usr/src/app/package-lock.json:delegated
       - ./ssr:/usr/src/app/ssr:delegated
       - ./build:/usr/src/app/build:delegated
+      - ./test:/usr/src/app/test:delegated
     environment:
       NODE_ENV: development
       PGSTRING: postgres://${PG_DATABASE:-postgres}:${PG_PASSWORD:-postgres}@${PG_HOST:-postgres}:${PG_PORT:-5432}/${PG_DATABASE:-postgres}

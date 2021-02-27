@@ -1,7 +1,7 @@
 const cronParser = require('cron-parser');
 
 const methods = {
-  delay: value => {
+  delay: (value) => {
     const firstLetter = value.substr(0, 1);
     if (['+', '-'].includes(firstLetter)) {
       return value;
@@ -10,9 +10,9 @@ const methods = {
   },
   cron: (value, options) => {
     const interval = cronParser.parseExpression(value, options);
-    return interval.next()._date.toDate();
+    return new Date(interval.next()._date.toString());
   },
-  plan: value => {
+  plan: (value) => {
     try {
       return new Date(value);
     } catch (err) {
