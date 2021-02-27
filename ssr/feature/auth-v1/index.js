@@ -3,7 +3,7 @@ const { FEATURE_NAME } = require('./hooks');
 const { v1SessionCreate } = require('./routes/v1-session-create');
 const { v1SessionDetails } = require('./routes/v1-session-details');
 
-const getRequestToken = request => {
+const getRequestToken = (request) => {
   const cookieName = request.getConfig('app.auth.cookie.name');
   const paramName = request.getConfig('app.auth.query.param');
   const headerName = request.getConfig('app.auth.header.name');
@@ -42,6 +42,7 @@ const authenticateDecorator = async (request, reply) => {
     });
   }
 
+  // Validate the token
   try {
     request.auth = request.jwt.verify(token);
   } catch (err) {

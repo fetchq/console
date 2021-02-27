@@ -30,10 +30,10 @@ test-e2e:
 test: test-unit test-e2e
 
 # Watching tests
-unit:
+tdd-unit:
 	humble exec api sh -c 'pwd && npm run tdd:unit'
 
-tdd:
+tdd-e2e:
 	humble exec api sh -c 'pwd && npm run tdd:e2e'
 
 # Gain access to the web application
