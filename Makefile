@@ -6,35 +6,48 @@ version:=$(shell node -p "require('./package.json').version")
 # Docker image tag name
 tag?=${organization}/${name}
 
+install:
+	@echo "-- Installing NPM Dependencies..."
+	@humble pull
+	@humble up install
+	@humble rm -f install
 
 # Boot development environment
 start:
-	humble up -d postgres
-	humble up -d api app
-	humble logs -f api app postgres
+	@echo "-- Starting Project..."
+	@humble up -d postgres
+	@humble up -d api app
+	@humble logs -f api app postgres
+
+# Boot development environment
+styleguide:
+	@echo "-- Starting Styleguide..."
+	@humble up -d styleguide
+	@humble logs -f styleguide
 
 stop:
-	humble down
-
-# Single run tests
-install:
-	humble exec api sh -c 'pwd && npm install'
+	@echo "-- Terminating Project..."
+	@humble down
 
 # Single run tests
 test-unit:
-	humble exec api sh -c 'pwd && npm run test:unit'
+	@echo "-- Running Unit Tests..."
+	@humble exec api sh -c 'pwd && npm run test:unit'
 
 test-e2e:
-	humble exec api sh -c 'pwd && npm run test:e2e'
+	@echo "-- Running E2E Tests..."
+	@humble exec api sh -c 'pwd && npm run test:e2e'
 
 test: test-unit test-e2e
 
 # Watching tests
 tdd-unit:
-	humble exec api sh -c 'pwd && npm run tdd:unit'
+	@echo "-- Starting a TDD session on Unit Tests..."
+	@humble exec api sh -c 'pwd && npm run tdd:unit'
 
 tdd-e2e:
-	humble exec api sh -c 'pwd && npm run tdd:e2e'
+	@echo "-- Starting a TDD session on E2E Tests..."
+	@humble exec api sh -c 'pwd && npm run tdd:e2e'
 
 # Gain access to the web application
 ssh:

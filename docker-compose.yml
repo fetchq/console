@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  install:
+    image: node:13.10
+    volumes:
+      - ./.docker-data/api/node_modules:/usr/src/app/node_modules:cached
+      - ./package.json:/usr/src/app/package.json:delegated
+      - ./package-lock.json:/usr/src/app/package-lock.json:delegated
+    working_dir: /usr/src/app
+    entrypoint: ['npm', 'install']
+
   api:
     image: node:13.10
     depends_on:
@@ -20,7 +29,7 @@ services:
       FETCHQ_CONSOLE_PASSWORD: fetchq
       FETCHQ_CORS_ENABLED: 'true'
     working_dir: /usr/src/app
-    entrypoint: ['yarn', 'start:docker:api']
+    entrypoint: ['npm', 'run', 'start:api']
     healthcheck:
       test: ['CMD', 'curl', 'localhost:8080/healthz']
       interval: 5s
@@ -43,7 +52,7 @@ services:
     environment:
       REACT_APP_SERVER_URL: http://api
     working_dir: /usr/src/app
-    entrypoint: ['yarn', 'start:docker:app']
+    entrypoint: ['npm', 'run', 'start:app']
 
   styleguide:
     image: node:13.10
@@ -56,7 +65,7 @@ services:
       - ./src:/usr/src/app/src:delegated
       - ./styleguide.config.js:/usr/src/app/styleguide.config.js:delegated
     working_dir: /usr/src/app
-    entrypoint: ['yarn', 'start:docker:styleguide']
+    entrypoint: ['npm', 'run', 'start:styleguide']
 
   postgres:
     image: postgres:13.0

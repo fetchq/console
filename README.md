@@ -9,21 +9,26 @@
 ```bash
 PGSTRING=postgres://... \
 NODE_ENV=development \
-yarn start
+
+npm install
+npm start
 ```
 
 Or with docker:
 
 ```bash
-# start the service
+# Install or update NPM & Docker dependencies:
+make install
+
+# Start the service:
 make start
 
-# stop the service
+# Stop the service:
 make stop
 
-# start e2e TDD session
+# Run a complete series of tests:
 # (run this in a different terminal)
-make tdd
+make test
 ```
 
 Configure the host's ports via `.env`:
