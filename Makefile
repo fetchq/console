@@ -38,8 +38,12 @@ stop:
 
 # Single run tests
 test-unit:
-	@echo "-- Running Unit Tests..."
+	@echo "-- Running Unit Tests on APIs..."
 	@humble exec api sh -c 'pwd && npm run test:unit'
+
+test-client:
+	@echo "-- Running Unit Tests on Client..."
+	@humble exec api sh -c 'pwd && npm run test:client'
 
 test-e2e:
 	@echo "-- Running E2E Tests..."
@@ -49,8 +53,12 @@ test: test-unit test-e2e
 
 # Watching tests
 tdd-unit:
-	@echo "-- Starting a TDD session on Unit Tests..."
+	@echo "-- Starting a TDD session on Unit Tests on APIs..."
 	@humble exec api sh -c 'pwd && npm run tdd:unit'
+
+tdd-client:
+	@echo "-- Starting a TDD session on Unit Tests on Client..."
+	@humble exec api sh -c 'pwd && npm run tdd:client'
 
 tdd-e2e:
 	@echo "-- Starting a TDD session on E2E Tests..."
