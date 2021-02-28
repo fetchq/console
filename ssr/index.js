@@ -16,11 +16,10 @@ const serviceTdd = require('./service/service-tdd');
 /**
  * Features
  */
-// const featurePing = require('./feature/ping');
-// const featureSchemaV1 = require('./feature/schema-v1');
-// const featureApiV1 = require('./feature/api-v1');
+
+const featureSchemaV1 = require('./feature/schema-v1');
+const featureApiV1 = require('./feature/api-v1');
 const featureAuthV1 = require('./feature/auth-v1');
-// const featureWorkersV1 = require('./feature/workers-v1');
 
 const env = require('./environment');
 const settings = require('./settings');
@@ -44,15 +43,13 @@ runHookApp({
     ...(useApi ? [serviceFastifyHealthz] : []),
     ...(useCors ? [serviceFastifyCors] : []),
     ...(useConsole ? [serviceFastifyStatic] : []),
-    // ...(useApi ? [serviceFastifyFetchq] : []),
+    ...(useApi ? [serviceFastifyFetchq] : []),
     serviceTdd,
   ],
   features: [
-    // ...(useApi ? [featurePing] : []),
-    // ...(useApi ? [featureSchemaV1] : []),
-    // ...(useApi ? [featureApiV1] : []),
+    ...(useApi ? [featureSchemaV1] : []),
+    ...(useApi ? [featureApiV1] : []),
     ...(useApi ? [featureAuthV1] : []),
-    // ...(useWorkers ? [featureWorkersV1] : []),
   ],
 }).catch((err) => console.error(err.message));
 

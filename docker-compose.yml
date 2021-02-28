@@ -26,8 +26,8 @@ services:
     environment:
       NODE_ENV: development
       PGSTRING: postgres://${PG_DATABASE:-postgres}:${PG_PASSWORD:-postgres}@${PG_HOST:-postgres}:${PG_PORT:-5432}/${PG_DATABASE:-postgres}
-      FETCHQ_CONSOLE_PASSWORD: fetchq
-      FETCHQ_CORS_ENABLED: 'true'
+      FETCHQ_CONSOLE_PASSWORD: ${FETCHQ_CONSOLE_PASSWORD:-}
+      FETCHQ_CORS_ENABLED: ${FETCHQ_CONSOLE_PASSWORD:-true}
     working_dir: /usr/src/app
     entrypoint: ['npm', 'run', 'start:api']
     healthcheck:

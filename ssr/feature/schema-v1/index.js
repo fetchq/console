@@ -1,39 +1,43 @@
 const { FEATURE_NAME } = require('./hooks');
 
-const resetFetchq = async fetchq => {
-  const queues = await fetchq.pool.query(
-    'SELECT * FROM fetchq_catalog.fetchq_sys_queues',
-  );
+// Destroys all queues and performs a hard reset on
+// metrics and all related tables
+const resetFetchq = async (fetchq) => {
+  const queues = await fetchq.pool.query('SELECT * FROM fetchq.queues');
   for (const queue of queues.rows) {
-    await fetchq.pool.query(
-      `TRUNCATE fetchq_catalog.fetchq__${queue.name}__documents`,
-    );
-    await fetchq.pool.query(
-      `TRUNCATE fetchq_catalog.fetchq__${queue.name}__errors`,
-    );
-    await fetchq.pool.query(
-      `TRUNCATE fetchq_catalog.fetchq__${queue.name}__metrics`,
-    );
+    await fetchq.pool.query(`SELECT * FROM fetchq.queue_drop('${queue.name}')`);
   }
-  await await fetchq.pool.query('SELECT fetchq_metric_reset_all()');
+  await fetchq.pool.query(`TRUNCATE fetchq.queues RESTART IDENTITY CASCADE`);
+  await fetchq.pool.query(`TRUNCATE fetchq.metrics RESTART IDENTITY CASCADE`);
+  await fetchq.pool.query(`TRUNCATE fetchq.metrics_writes`);
+  await fetchq.pool.query(
+    `UPDATE fetchq.jobs SET 
+      attempts = 0, 
+      iterations = 0, 
+      last_iteration = NULL, 
+      next_iteration = NOW()`,
+  );
 };
 
 module.exports = ({ registerAction }) => {
   registerAction({
+    hook: '$TDD_POSTGRESQL_RESET?',
+    name: FEATURE_NAME,
+    handler: async (_, { getContext }) => {
+      try {
+        console.info('@TEST: reset schema/v1');
+        const fetchq = getContext('fetchq');
+        await resetFetchq(fetchq);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
+  registerAction({
     hook: '$TDD_FASTIFY_ROUTE?',
     name: FEATURE_NAME,
     handler: ({ registerRoute }) => {
-      registerRoute({
-        method: 'GET',
-        url: '/schema-v1/reset',
-        handler: async (request, reply) => {
-          console.info('@TEST: reset schema/v1');
-          const fetchq = request.getContext('fetchq');
-          await resetFetchq(fetchq);
-          reply.send('+ok');
-        },
-      });
-
       registerRoute({
         method: 'GET',
         url: '/schema-v1/queues/stop',
