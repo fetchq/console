@@ -1,4 +1,4 @@
-describe('v1QueueList', () => {
+describe('v1QueuesList', () => {
   beforeEach(global.resetSchema);
 
   it('should return a list of queues', async () => {
