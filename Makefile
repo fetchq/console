@@ -68,7 +68,11 @@ ssh:
 
 # Build the project using cache
 image:
-	docker build -t ${tag} -t ${tag}:${version} .
+	docker build -t ${tag} -t ${organization}/${name}:${version} .
+
+publish: image
+	docker push ${organization}/${name}:${version}
+	docker push ${organization}/${name}:latest
 
 # Spins up a container from the latest available image
 # this is useful to test locally
