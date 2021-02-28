@@ -36,6 +36,8 @@ stop:
 	@echo "-- Terminating Project..."
 	@humble down
 
+restart: stop start
+
 # Single run tests
 test-unit:
 	@echo "-- Running Unit Tests on APIs..."

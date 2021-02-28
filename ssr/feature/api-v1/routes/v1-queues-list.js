@@ -1,13 +1,13 @@
-const schema = require('./v1-queue-list.schema');
+const schema = require('./v1-queues-list.schema');
 
 /**
  * GET://v1/cron?
  * group=mpeg
  * limit=10
  */
-const v1QueueList = {
+const v1QueuesList = {
   method: 'GET',
-  url: '/api/v1/queue/',
+  url: '/api/v1/queues/',
   schema,
   handler: async (request, reply) => {
     const { query } = request;
@@ -45,4 +45,4 @@ const v1QueueList = {
   },
 };
 
-module.exports = { v1QueueList };
+module.exports = { v1QueuesList };

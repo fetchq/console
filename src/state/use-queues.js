@@ -1,7 +1,7 @@
 import { useGet } from './use-get';
 import { makeQueue } from '../data-types/queue';
 
-const endpoint = '/api/v1/queue';
+const endpoint = '/api/v1/queues';
 
 export const useQueues = () => {
   const [info] = useGet(endpoint);
