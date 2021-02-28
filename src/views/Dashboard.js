@@ -1,8 +1,16 @@
 import React from 'react';
 import AppLayout from '../layouts/AppLayout';
+import { useQueues } from '../state/use-queues';
+import QueueListTable from '../components/QueueListTable';
 
 const Dashboard = () => {
-  return <AppLayout>Welcome to Fetchq Dashboard</AppLayout>;
+  const queues = useQueues();
+  console.log(queues);
+  return (
+    <AppLayout>
+      <QueueListTable items={queues.items} />
+    </AppLayout>
+  );
 };
 
 export default Dashboard;

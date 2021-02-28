@@ -17,11 +17,18 @@ start:
 	@echo "-- Starting Project..."
 	@humble up -d postgres
 	@humble up -d api app
-	@humble logs -f api app postgres
+	@humble logs -f api app
 
-# Boot development environment
+api:
+	@echo "-- Starting API..."
+	@humble up -d postgres
+	@humble up -d api
+	@humble logs -f api
+
 styleguide:
 	@echo "-- Starting Styleguide..."
+	@humble stop styleguide
+	@humble rm -f styleguide
 	@humble up -d styleguide
 	@humble logs -f styleguide
 

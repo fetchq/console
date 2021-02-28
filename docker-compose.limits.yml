@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  api:
+    deploy:
+      resources:
+        limits:
+          cpus: ${API_CPU_LIMIT:-0.5}
+          memory: ${API_MEMORY_LIMIT:-250M}
+
+  app:
+    deploy:
+      resources:
+        limits:
+          cpus: ${APP_CPU_LIMIT:-1}
+          memory: ${APP_MEMORY_LIMIT:-1000M}
+
+  styleguide:
+    deploy:
+      resources:
+        limits:
+          cpus: ${STYLEGUIDE_CPU_LIMIT:-1}
+          memory: ${STYLEGUIDE_MEMORY_LIMIT:-1000M}
