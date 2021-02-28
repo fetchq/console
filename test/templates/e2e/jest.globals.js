@@ -36,6 +36,12 @@ const setAppConfig = async (path, value) =>
   (await axios.post(`${env.TEST_SERVER_ROOT}/test/config`, { path, value }))
     .data;
 
+const mockAppConfig = async (path, value) => {
+  const originalValue = await getAppConfig(path);
+  await setAppConfig(path, value);
+  return () => setAppConfig(path, originalValue);
+};
+
 const info = (data) => console.info(JSON.stringify(data, null, 2));
 
 const query = async (query) => {
@@ -79,6 +85,7 @@ module.exports = () => ({
   serverIsUp,
   getAppConfig,
   setAppConfig,
+  mockAppConfig,
   info,
   query,
   resetSchema,
