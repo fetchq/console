@@ -1,12 +1,15 @@
 import React from 'react';
 import AppLayout from '../layouts/AppLayout';
 
+import { useQueueDetails } from '../state/use-queue-details';
+
 const QueueDetailsView = ({
   match: {
     params: { name },
   },
 }) => {
-  console.log(name);
+  const info = useQueueDetails(name);
+
   return (
     <AppLayout
       titleProps={{
@@ -14,7 +17,7 @@ const QueueDetailsView = ({
         backTo: '/',
       }}
     >
-      ... queue details ...
+      <pre>{JSON.stringify(info, null, 2)}</pre>
     </AppLayout>
   );
 };

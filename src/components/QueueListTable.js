@@ -20,6 +20,7 @@ const QueueListTable = ({ items, onDisclose }) => (
           <TableCell>ID</TableCell>
           <TableCell>Name</TableCell>
           <TableCell align="center">Statuts</TableCell>
+          <TableCell align="center">Documents</TableCell>
           <TableCell align="right">Max Attempts</TableCell>
           <TableCell align="right">Logs Retention</TableCell>
           <TableCell align="right">Created At</TableCell>
@@ -33,6 +34,10 @@ const QueueListTable = ({ items, onDisclose }) => (
               <TableCell>{queue.name}</TableCell>
               <TableCell align="center">
                 {queue.isActive ? 'active' : 'paused'}
+              </TableCell>
+              <TableCell align="center">
+                {queue.cnt}
+                <small>/{queue.cnt}</small>
               </TableCell>
               <TableCell align="right">{queue.maxAttempts}</TableCell>
               <TableCell align="right">{queue.logsRetention}</TableCell>
