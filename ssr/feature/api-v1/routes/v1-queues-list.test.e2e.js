@@ -6,5 +6,6 @@ describe('v1QueuesList', () => {
     const r1 = await global.get('/api/v1/queues');
     expect(r1.data.items[0].id).toBe(1);
     expect(r1.data.items[0].name).toBe('q1');
+    expect(r1.data.items[0].cnt).toBe(0);
   });
 });
