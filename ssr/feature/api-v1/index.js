@@ -2,16 +2,18 @@ const { FEATURE_NAME } = require('./hooks');
 
 const { v1QueuesList } = require('./routes/v1-queues-list');
 const { v1QueueDetails } = require('./routes/v1-queue-details');
+const { v1QueueDocuments } = require('./routes/v1-queue-documents');
 
 module.exports = ({ registerAction }) => {
   registerAction({
     hook: '$FASTIFY_PLUGIN',
     name: FEATURE_NAME,
     handler: ({ registerPlugin }) => {
-      registerPlugin((fastify, options, done) => {
+      registerPlugin((fastify, _, done) => {
         fastify.addHook('preHandler', fastify.authenticate);
-        fastify.route(v1QueuesList);
+        fastify.route(v1QueueDocuments);
         fastify.route(v1QueueDetails);
+        fastify.route(v1QueuesList);
         done();
       });
     },
