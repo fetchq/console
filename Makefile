@@ -19,23 +19,31 @@ start:
 	@humble up -d api app
 	@humble logs -f api app
 
-api:
+stop:
+	@echo "-- Terminating Project..."
+	@humble down
+
+start-api:
 	@echo "-- Starting API..."
 	@humble up -d postgres
 	@humble up -d api
 	@humble logs -f api
 
-styleguide:
+start-styleguide:
 	@echo "-- Starting Styleguide..."
 	@humble stop styleguide
 	@humble rm -f styleguide
 	@humble up -d styleguide
 	@humble logs -f styleguide
 
-stop:
-	@echo "-- Terminating Project..."
-	@humble down
+stop-styleguide:
+	@echo "-- Stopping Styleguide..."
+	@humble stop styleguide
+	@humble rm -f styleguide
 
+
+
+boot: install start
 restart: stop start
 
 # Single run tests
