@@ -14,7 +14,10 @@ tasks:
     openMode: tab-after
   - name: Api
     init: rm -rf ./.gitpod.lock && npm install && touch ./.gitpod.lock
-    command: npm run start:gitpod:api
+    command: HELLO=world
+      FETCHQ_CORS_ENABLED=true
+      FETCHQ_CORS_ORIGIN=$(gp url 3000)
+      npm run start:gitpod:api
     openIn: bottom
     openMode: tab-after
   - name: Styleguide
