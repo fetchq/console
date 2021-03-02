@@ -7,18 +7,19 @@ module.exports = {
         type: 'integer',
         default: 10,
       },
+      offset: {
+        type: 'number',
+        default: 0,
+      },
       order: {
         type: 'string',
         default: 'created_at',
         enum: ['created_at', 'next_iteration'],
       },
-      dir: {
+      direction: {
         type: 'string',
         default: 'desc',
         enum: ['desc', 'asc'],
-      },
-      cursor: {
-        type: 'string',
       },
     },
   },
@@ -33,24 +34,16 @@ module.exports = {
         data: {
           type: 'object',
           properties: {
-            pages: {
+            pagination: {
               type: 'object',
               properties: {
-                itemsCount: { type: 'number' },
-                pagesCount: { type: 'number' },
-                pageSize: { type: 'number' },
-                cursorStart: { type: 'string' },
-                cursorEnd: { type: 'string' },
-                hasNext: { type: 'boolean' },
+                count: { type: 'number' },
+                limit: { type: 'number' },
+                offset: { type: 'number' },
+                order: { type: 'string' },
+                direction: { type: 'string' },
               },
-              required: [
-                'pagesCount',
-                'itemsCount',
-                'pageSize',
-                'cursorStart',
-                'cursorEnd',
-                'hasNext',
-              ],
+              required: ['count', 'limit', 'offset', 'order', 'direction'],
               additionalProperties: false,
             },
             items: {
@@ -89,8 +82,8 @@ module.exports = {
             },
             _sql: { type: 'string' },
           },
-          required: ['pages', 'items'],
-          additionalProperties: false,
+          // required: ['pages', 'items'],
+          additionalProperties: true,
         },
         errors: {
           type: 'array',

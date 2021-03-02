@@ -10,8 +10,15 @@ import Paper from '@material-ui/core/Paper';
 
 import DisplayDate from '../components/DisplayDate';
 
-const QueueDocumentsList = ({ items, pagination, loadNextPage, ...rest }) => {
+const QueueDocumentsList = ({
+  items,
+  hasNextPage,
+  hasPrevPage,
+  loadNextPage,
+  loadPrevPage,
+}) => {
   const onDisclose = (doc) => console.log(doc);
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -44,7 +51,13 @@ const QueueDocumentsList = ({ items, pagination, loadNextPage, ...rest }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {pagination.hasNext && <button onClick={loadNextPage}>load more</button>}
+      <button onClick={loadPrevPage} disabled={!hasPrevPage}>
+        prev page
+      </button>
+      {' | '}
+      <button onClick={loadNextPage} disabled={!hasNextPage}>
+        next page
+      </button>
     </>
   );
 };

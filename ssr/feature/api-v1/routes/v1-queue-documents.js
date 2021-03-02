@@ -6,19 +6,20 @@ const retrieveDocuments = async (query, params, fetchq) => {
 
   sql.push(`SELECT * FROM "fetchq_data"."${params.name}__docs"`);
 
-  if (query.cursor) {
-    where.push(
-      `${query.order} ${query.dir === 'asc' ? '>' : '<'} '${query.cursor}'`,
-    );
-  }
+  // if (query.cursor) {
+  //   where.push(
+  //     `${query.order} ${query.dir === 'asc' ? '>' : '<'} '${query.cursor}'`,
+  //   );
+  // }
 
   if (where.length) {
     sql.push(`WHERE`);
     sql.push(where.join(' AND '));
   }
 
-  sql.push(`ORDER BY "${query.order}" ${query.dir.toUpperCase()}`);
+  sql.push(`ORDER BY "${query.order}" ${query.direction.toUpperCase()}`);
   sql.push(`LIMIT ${query.limit}`);
+  sql.push(`OFFSET ${query.limit * query.offset}`);
 
   const _sql = sql.join(' ');
   const items = await fetchq.pool.query(_sql);
@@ -29,24 +30,11 @@ const retrieveDocuments = async (query, params, fetchq) => {
 const retrievePagination = async (query, params, items, fetchq) => {
   const _sql = `SELECT * FROM "fetchq"."metric_get"('${params.name}', 'cnt')`;
   const result = await fetchq.pool.query(_sql);
-  const itemsCount = result.rows[0].current_value;
-
-  const pageSize = query.limit;
-  const pagesCount = Math.ceil(itemsCount / pageSize);
-
-  // Fill
-  const hasNext = items.length === pageSize;
-  const cursorStart = items.length ? items[0][query.order] : '';
-  const cursorEnd = items.length ? items[items.length - 1][query.order] : '';
 
   return [
     {
-      itemsCount,
-      pagesCount,
-      pageSize,
-      cursorStart,
-      cursorEnd,
-      hasNext,
+      count: result.rows[0].does_exists ? result.rows[0].current_value : null,
+      ...query,
     },
     _sql,
   ];
@@ -65,7 +53,7 @@ const v1QueueDocuments = {
 
     try {
       const [items, itemsSql] = await retrieveDocuments(query, params, fetchq);
-      const [pages, pagesSql] = await retrievePagination(
+      const [pagination, paginationSql] = await retrievePagination(
         query,
         params,
         items,
@@ -75,9 +63,9 @@ const v1QueueDocuments = {
       reply.send({
         success: true,
         data: {
-          pages,
+          pagination,
           items,
-          _sql: [itemsSql, pagesSql].join('\n'),
+          _sql: [itemsSql, paginationSql].join('\n'),
         },
       });
     } catch (err) {
