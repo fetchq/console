@@ -11,24 +11,13 @@ export const useQueueDocuments = (name, { limit = 10 } = {}) => {
   const hasData = Boolean(info.data);
   const items = hasData ? info.data.items.map(makeDocumentListItem) : [];
   const pagination = hasData ? info.data.pagination : {};
-  const hasNextPage = items.length === pagination.limit;
-  const hasPrevPage = pagination.offset > 0;
 
-  const loadNextPage = () =>
+  const loadPage = (offset) =>
     reload({
       keepData: true,
       params: {
         limit,
-        offset: pagination.offset + 1,
-      },
-    });
-
-  const loadPrevPage = () =>
-    reload({
-      keepData: true,
-      params: {
-        limit,
-        offset: pagination.offset - 1,
+        offset,
       },
     });
 
@@ -38,9 +27,6 @@ export const useQueueDocuments = (name, { limit = 10 } = {}) => {
     items,
     pagination,
     reload,
-    hasNextPage,
-    hasPrevPage,
-    loadNextPage,
-    loadPrevPage,
+    loadPage,
   };
 };

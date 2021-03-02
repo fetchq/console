@@ -12,7 +12,7 @@ const QueueDetailsView = ({
   },
 }) => {
   const { queue, metrics, hasData, reload, ...info } = useQueueDetails(name);
-  const documents = useQueueDocuments(name, { limit: 2 });
+  const documents = useQueueDocuments(name);
 
   return (
     <AppLayout
