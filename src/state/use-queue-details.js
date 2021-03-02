@@ -2,7 +2,7 @@ import { useGet } from './use-get';
 import { makeQueueDetails, makeQueueMetrics } from '../data-types/queue';
 
 export const useQueueDetails = (name) => {
-  const [info] = useGet(`/api/v1/queues/${name}`);
+  const [info, { fetch: reload }] = useGet(`/api/v1/queues/${name}`);
 
   const hasData = Boolean(info.data);
   const queue = hasData
@@ -16,5 +16,6 @@ export const useQueueDetails = (name) => {
     hasData,
     queue,
     metrics,
+    reload,
   };
 };
