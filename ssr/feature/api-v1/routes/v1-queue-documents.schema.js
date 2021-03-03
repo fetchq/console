@@ -82,8 +82,8 @@ module.exports = {
             },
             _sql: { type: 'string' },
           },
-          // required: ['pages', 'items'],
-          additionalProperties: true,
+          required: ['pagination', 'items'],
+          additionalProperties: false,
         },
         errors: {
           type: 'array',

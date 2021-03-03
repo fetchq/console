@@ -65,7 +65,7 @@ const http = {
     try {
       return (await axios.post(`${env.TEST_SERVER_ROOT}${uri}`, data)).data;
     } catch (err) {
-      console.log(err.response.data);
+      // console.log(err.response.data);
       throw err;
     }
   },
