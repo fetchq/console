@@ -12,7 +12,7 @@ import Pagination from '@material-ui/lab/Pagination';
 
 import DisplayDate from '../components/DisplayDate';
 
-const QueueDocumentsList = ({ items, pagination, loadPage }) => {
+const QueueLogsList = ({ items, pagination, loadPage }) => {
   const onDisclose = (doc) => console.log(doc);
   const onPageChange = (evt, offset) => loadPage(offset - 1);
 
@@ -27,7 +27,7 @@ const QueueDocumentsList = ({ items, pagination, loadPage }) => {
         }}
       >
         <Typography variant="h4" component="h2">
-          Documents
+          Logs
         </Typography>
         <Pagination
           count={Math.ceil(pagination.count / pagination.limit)}
@@ -43,28 +43,24 @@ const QueueDocumentsList = ({ items, pagination, loadPage }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Subject</TableCell>
               <TableCell>Created At</TableCell>
-              <TableCell>Last Run At</TableCell>
-              <TableCell>Next Run</TableCell>
-              <TableCell>payload</TableCell>
+              <TableCell>Subject</TableCell>
+              <TableCell>message</TableCell>
+              <TableCell>refId</TableCell>
+              <TableCell>details</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {items.map((doc) => {
+            {items.map((log) => {
               return (
-                <TableRow key={doc.subject} onClick={() => onDisclose(doc)}>
-                  <TableCell>{doc.subject}</TableCell>
+                <TableRow key={log.id} onClick={() => onDisclose(log)}>
                   <TableCell>
-                    <DisplayDate date={doc.createdAt} />
+                    <DisplayDate date={log.createdAt} />
                   </TableCell>
-                  <TableCell>
-                    <DisplayDate date={doc.lastIteration} />
-                  </TableCell>
-                  <TableCell>
-                    <DisplayDate date={doc.nextIteration} />
-                  </TableCell>
-                  <TableCell>{JSON.stringify(doc.payload, null, 2)}</TableCell>
+                  <TableCell>{log.subject}</TableCell>
+                  <TableCell>{log.message}</TableCell>
+                  <TableCell>{log.refId}</TableCell>
+                  <TableCell>{JSON.stringify(log.details, null, 2)}</TableCell>
                 </TableRow>
               );
             })}
@@ -88,4 +84,4 @@ const QueueDocumentsList = ({ items, pagination, loadPage }) => {
   );
 };
 
-export default QueueDocumentsList;
+export default QueueLogsList;
