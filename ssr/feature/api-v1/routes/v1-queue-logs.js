@@ -38,7 +38,7 @@ const retrieveItems = async (query, params, fetchq) => {
  * For the purpose of paginating the logs table, this should be just fine :-)
  */
 const retrievePagination = async (query, params, items, fetchq) => {
-  const _sql = `SELECT MAX("id") - MIN("id") + 1 AS count FROM "fetchq_data"."q1__logs"`;
+  const _sql = `SELECT MAX("id") - MIN("id") + 1 AS count FROM "fetchq_data"."${params.name}__logs"`;
   const result = await fetchq.pool.query(_sql);
 
   return [
