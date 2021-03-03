@@ -9,10 +9,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Pagination from '@material-ui/lab/Pagination';
+import IconButton from '@material-ui/core/IconButton';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 import DisplayDate from '../components/DisplayDate';
 
-const QueueDocumentsList = ({ items, pagination, loadPage }) => {
+const QueueDocumentsList = ({ items, pagination, loadPage, onDocPlay }) => {
   const onDisclose = (doc) => console.log(doc);
   const onPageChange = (evt, offset) => loadPage(offset - 1);
 
@@ -48,6 +50,7 @@ const QueueDocumentsList = ({ items, pagination, loadPage }) => {
               <TableCell>Last Run At</TableCell>
               <TableCell>Next Run</TableCell>
               <TableCell>payload</TableCell>
+              <TableCell align="right">actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -65,6 +68,18 @@ const QueueDocumentsList = ({ items, pagination, loadPage }) => {
                     <DisplayDate date={doc.nextIteration} />
                   </TableCell>
                   <TableCell>{JSON.stringify(doc.payload, null, 2)}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      aria-label="play"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onDocPlay(doc);
+                      }}
+                    >
+                      <PlayArrowIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               );
             })}

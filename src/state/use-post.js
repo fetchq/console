@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+
 const SERVER_URL = process.env.REACT_APP_SERVER_URL || '';
 
 const INITIAL_STATE = {
@@ -13,10 +14,11 @@ const INITIAL_STATE = {
 export const usePost = (url, options = {}) => {
   const [state, setState] = useState(INITIAL_STATE);
   const { ...fetchOptions } = options;
-  const endpointUrl = SERVER_URL + url;
 
   const send = async (url, data, options) => {
-    setState(state => ({
+    const endpointUrl = SERVER_URL + url;
+
+    setState((state) => ({
       ...state,
       isLoading: true,
       errors: null,
@@ -25,11 +27,11 @@ export const usePost = (url, options = {}) => {
     }));
 
     try {
-      const response = await axios.post(url, data, {
+      const response = await axios.post(endpointUrl, data, {
         ...fetchOptions,
         withCredentials: true,
       });
-      setState(state => ({
+      setState((state) => ({
         ...state,
         isLoading: false,
         isFirstLoading: false,
@@ -37,8 +39,9 @@ export const usePost = (url, options = {}) => {
         errors: response.data.success ? null : response.data.errors,
         response,
       }));
+      return response;
     } catch (error) {
-      setState(state => ({
+      setState((state) => ({
         ...state,
         isLoading: false,
         isFirstLoading: false,
@@ -53,7 +56,7 @@ export const usePost = (url, options = {}) => {
     state,
     {
       // Provide a lazy and fully customizable interface to Post
-      send: (data, _options = fetchOptions, _url = endpointUrl) =>
+      send: (data, _options = fetchOptions, _url = url) =>
         send(_url, data, _options),
     },
   ];
