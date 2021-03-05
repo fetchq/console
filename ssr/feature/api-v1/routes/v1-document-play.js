@@ -1,4 +1,4 @@
-const schema = require('./v1-queue-document-play.schema');
+const schema = require('./v1-document-play.schema');
 
 /**
  * POST://api/v1/queues/:name/play/:subject

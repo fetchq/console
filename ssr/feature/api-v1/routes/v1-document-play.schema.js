@@ -1,28 +1,13 @@
 module.exports = {
-  //   query: {
-  //     type: 'object',
-  //     additionalProperties: false,
-  //     properties: {
-  //       limit: {
-  //         type: 'integer',
-  //         default: 10,
-  //       },
-  //       offset: {
-  //         type: 'number',
-  //         default: 0,
-  //       },
-  //       order: {
-  //         type: 'string',
-  //         default: 'created_at',
-  //         enum: ['created_at', 'next_iteration'],
-  //       },
-  //       direction: {
-  //         type: 'string',
-  //         default: 'desc',
-  //         enum: ['desc', 'asc'],
-  //       },
-  //     },
-  //   },
+  params: {
+    type: 'object',
+    properties: {
+      name: { type: 'string' },
+      subject: { type: 'string' },
+    },
+    additionalProperties: false,
+    required: ['name', 'subject'],
+  },
   response: {
     '2xx': {
       type: 'object',

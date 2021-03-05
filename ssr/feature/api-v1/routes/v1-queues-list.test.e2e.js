@@ -1,3 +1,5 @@
+const { Replay10 } = require('@material-ui/icons');
+
 describe('v1QueuesList', () => {
   beforeEach(global.resetSchema);
 
