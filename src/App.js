@@ -49,7 +49,7 @@ export default function App() {
       <Switch>
         <Route path="/" exact component={Dashboard} />
         <Route
-          path="/queues/:queueName/doc/:docSubject"
+          path="/queues/:queueName/docs/:docSubject"
           component={DocumentDetailsView}
         />
         <Route path="/queues/:queueName" component={QueueDetailsView} />

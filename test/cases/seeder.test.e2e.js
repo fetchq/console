@@ -23,14 +23,14 @@ describe('Seeder', () => {
 
     for (let i = 0; i < 4; i++) {
       const queue = uniqueNamesGenerator({
-        dictionaries: [adjectives, colors, animals],
+        dictionaries: [adjectives, animals],
       });
       await queueCreate(queue);
       for (let j = 0; j < 50; j++) {
         await docAppend(queue, {
           i,
           name: uniqueNamesGenerator({
-            dictionaries: [adjectives, colors, animals],
+            dictionaries: [adjectives, animals],
           }),
         });
       }

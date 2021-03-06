@@ -13,12 +13,12 @@ module.exports = {
       },
       order: {
         type: 'string',
-        default: 'created_at',
+        default: 'next_iteration',
         enum: ['created_at', 'next_iteration'],
       },
       direction: {
         type: 'string',
-        default: 'desc',
+        default: 'asc',
         enum: ['desc', 'asc'],
       },
     },

@@ -2,8 +2,8 @@ import { useGet } from './use-get';
 import { usePost } from './use-post';
 import { makeDocumentListItem } from '../data-types/document';
 
-export const useQueueDocuments = (name, { limit = 10 } = {}) => {
-  const [info, { fetch: reload }] = useGet(`/api/v1/queues/${name}/documents`, {
+export const useQueueDocs = (name, { limit = 10 } = {}) => {
+  const [info, { fetch: reload }] = useGet(`/api/v1/queues/${name}/docs`, {
     params: {
       limit,
     },

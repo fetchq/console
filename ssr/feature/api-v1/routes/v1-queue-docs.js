@@ -1,4 +1,4 @@
-const schema = require('./v1-queue-documents.schema');
+const schema = require('./v1-queue-docs.schema');
 
 const retrieveDocuments = async (query, params, fetchq) => {
   const sql = [];
@@ -43,9 +43,9 @@ const retrievePagination = async (query, params, items, fetchq) => {
 /**
  * GET://v1/queues/:name/documents
  */
-const v1QueueDocuments = {
+const v1QueueDocs = {
   method: 'GET',
-  url: '/api/v1/queues/:name/documents',
+  url: '/api/v1/queues/:name/docs',
   schema,
   handler: async (request, reply) => {
     const { query, params } = request;
@@ -78,4 +78,4 @@ const v1QueueDocuments = {
   },
 };
 
-module.exports = { v1QueueDocuments };
+module.exports = { v1QueueDocs };

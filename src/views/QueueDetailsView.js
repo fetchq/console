@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { useQueueDetails } from '../state/use-queue-details';
-import { useQueueDocuments } from '../state/use-queue-documents';
+import { useQueueDocs } from '../state/use-queue-docs';
 import { useQueueLogs } from '../state/use-queue-logs';
 import AppLayout from '../layouts/AppLayout';
 import QueueDetailsInfo from '../components/QueueDetailsInfo';
@@ -18,11 +18,11 @@ const QueueDetailsView = ({
   const { queue, metrics, hasData, reload, ...info } = useQueueDetails(
     queueName,
   );
-  const documents = useQueueDocuments(queueName);
+  const documents = useQueueDocs(queueName);
   const logs = useQueueLogs(queueName);
 
   const onDocDisclose = (doc) =>
-    history.push(`/queues/${queueName}/doc/${doc.subject}`);
+    history.push(`/queues/${queueName}/docs/${doc.subject}`);
 
   return (
     <AppLayout

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { useDocumentDetails } from '../state/use-document-details';
 import AppLayout from '../layouts/AppLayout';
@@ -8,7 +9,10 @@ const DocumentDetailsView = ({
     params: { queueName, docSubject },
   },
 }) => {
-  const { doc, ...foo } = useDocumentDetails(queueName, docSubject);
+  const { doc, nextDoc, prevDoc, ...foo } = useDocumentDetails(
+    queueName,
+    docSubject,
+  );
   console.log(foo);
   return (
     <AppLayout
@@ -19,6 +23,9 @@ const DocumentDetailsView = ({
       }}
     >
       <pre>{JSON.stringify(doc, null, 2)}</pre>
+      {prevDoc && <Link to={`/queues/${queueName}/docs/${prevDoc}`}>prev</Link>}
+      {' | '}
+      {nextDoc && <Link to={`/queues/${queueName}/docs/${nextDoc}`}>next</Link>}
       <pre>{JSON.stringify(foo, null, 2)}</pre>
     </AppLayout>
   );

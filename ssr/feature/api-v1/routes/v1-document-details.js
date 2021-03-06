@@ -2,7 +2,7 @@ const schema = require('./v1-document-details.schema');
 
 const v1DocumentDetails = {
   method: 'GET',
-  url: '/api/v1/queues/:name/doc/:subject',
+  url: '/api/v1/queues/:name/docs/:subject',
   schema,
   handler: async (request, reply) => {
     const { query, params } = request;
@@ -36,6 +36,7 @@ const v1DocumentDetails = {
         WHERE status IN (0, 1, 2)
           AND next_iteration < '${nextIteration}'
           AND subject != '${doc.subject}'
+        ORDER BY "next_iteration" ASC
         LIMIT 1;
       `;
 
@@ -44,6 +45,7 @@ const v1DocumentDetails = {
         WHERE status IN (0, 1, 2)
           AND next_iteration > '${nextIteration}'
           AND subject != '${doc.subject}'
+          ORDER BY "next_iteration" ASC
         LIMIT 1;
       `;
 
