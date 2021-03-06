@@ -1,8 +1,11 @@
+console.log('Starting Fetchq CONSOLE API...');
+require('dotenv').config();
 const { runHookApp } = require('@forrestjs/hooks');
 
 /**
  * Services
  */
+console.log('Loading services...');
 const serviceFetchq = require('@forrestjs/service-fetchq');
 const serviceFastify = require('@forrestjs/service-fastify');
 const serviceFastifyCors = require('@forrestjs/service-fastify-cors');
@@ -17,10 +20,12 @@ const serviceTdd = require('./service/service-tdd');
  * Features
  */
 
+console.log('Loading features...');
 const featureSchemaV1 = require('./feature/schema-v1');
 const featureApiV1 = require('./feature/api-v1');
 const featureAuthV1 = require('./feature/auth-v1');
 
+console.log('Loading environment & settings...');
 const env = require('./environment');
 const settings = require('./settings');
 
@@ -32,6 +37,7 @@ const useApi = env.FETCHQ_USE_API;
 const useConsole = useApi && env.FETCHQ_USE_API;
 const useCors = useApi && env.FETCHQ_CORS_ENABLED;
 
+console.log('Booting ForrestJS App...');
 runHookApp({
   settings,
   trace: 'compact',
@@ -51,7 +57,7 @@ runHookApp({
     ...(useApi ? [featureApiV1] : []),
     ...(useApi ? [featureAuthV1] : []),
   ],
-}).catch((err) => console.error(err.message));
+}).catch((err: any) => console.error(err.message));
 
 // Let Docker exit on Ctrl+C
 process.on('SIGINT', () => process.exit());

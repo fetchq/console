@@ -22,16 +22,18 @@ FROM node:13.10-alpine AS builder
 WORKDIR /usr/src/app-build
 ADD package.json /usr/src/app-build
 ADD package-lock.json /usr/src/app-build
-RUN npm install --only=production
+RUN npm install
 
-# Copy source files:
+# Build Client APP:
 WORKDIR /usr/src/app-build
 ADD src /usr/src/app-build/src
 ADD public /usr/src/app-build/public
+RUN npm run build:client
 
-# Build:
-WORKDIR /usr/src/app-build
-RUN npm run build
+# Build Server APP:
+ADD ssr /usr/src/app-build/ssr
+ADD tsconfig.json /usr/src/app-build
+RUN npm run build:api
 
 # Remove dev dependencies
 RUN npm prune --production
@@ -53,7 +55,7 @@ FROM node:13.10-alpine AS runner
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app-build/node_modules ./node_modules
 COPY --from=builder /usr/src/app-build/build ./build
-ADD ssr /usr/src/app/ssr
+COPY --from=builder /usr/src/app-build/build_ssr ./ssr
 
 # Default environment configuration:
 EXPOSE 8080
