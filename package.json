@@ -7,7 +7,8 @@
   "scripts": {
     "___// Development Utilities //___": "",
     "start": "node ssr/index.js",
-    "start:api": "nodemon --watch ssr ssr/index.ts",
+    "__start:api": "nodemon --watch ssr ssr/index.ts",
+    "start:api": "nodemon --watch \"ssr/**\" --ext \"js,ts,json\" --project ./tsconfig-ssr.json --exec 'ts-node' ssr/index.ts",
     "start:app": "react-scripts start",
     "start:styleguide": "styleguidist server",
     "start:gitpod:api": "NODE_ENV=development FETCHQ_CORS_ORIGIN=$(gp url 3000) nodemon --watch ssr ssr/index.js",
@@ -23,7 +24,7 @@
     "tdd:client": "react-scripts test",
     "___// Production Utilities //___": "",
     "build:client": "react-scripts build",
-    "build:api": "./node_modules/.bin/tsc --project ./"
+    "build:api": "./node_modules/.bin/tsc --project ./tsconfig-ssr.json"
   },
   "dependencies": {
     "@forrestjs/package-fastify": "3.20.2",
@@ -49,6 +50,7 @@
     "nodemon": "^2.0.7",
     "react-styleguidist": "^11.1.5",
     "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.3"
   },
   "keywords": [],

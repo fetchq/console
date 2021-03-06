@@ -32,7 +32,7 @@ RUN npm run build:client
 
 # Build Server APP:
 ADD ssr /usr/src/app-build/ssr
-ADD tsconfig.json /usr/src/app-build
+ADD tsconfig-ssr.json /usr/src/app-build/tsconfig-ssr.json
 RUN npm run build:api
 
 # Remove dev dependencies

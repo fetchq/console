@@ -19,7 +19,7 @@ const getRandomSecret = () =>
         numbers: true,
       });
 
-const env = envalid.cleanEnv(process.env, {
+const env1 = envalid.cleanEnv(process.env, {
   // PostgreSQL connection string:
   // > those variables are used in this order of priority
   FETCHQ_PGSTRING: envalid.str({ default: '' }),
@@ -58,4 +58,4 @@ const env = envalid.cleanEnv(process.env, {
   FETCHQ_USE_CONSOLE: envalid.bool({ default: true }),
 });
 
-module.exports = { ...env };
+module.exports = { ...env1 };

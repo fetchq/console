@@ -20,6 +20,7 @@ services:
       - ./.docker-data/api/node_modules:/usr/src/app/node_modules:cached
       - ./package.json:/usr/src/app/package.json:delegated
       - ./package-lock.json:/usr/src/app/package-lock.json:delegated
+      - ./tsconfig-ssr.json:/usr/src/app/tsconfig-ssr.json:delegated
       - ./ssr:/usr/src/app/ssr:delegated
       - ./build:/usr/src/app/build:delegated
       - ./test:/usr/src/app/test:delegated
