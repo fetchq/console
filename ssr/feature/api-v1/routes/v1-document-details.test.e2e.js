@@ -1,8 +1,6 @@
 describe('v1DocumentDetails', () => {
   beforeEach(global.resetSchema);
 
-  const getMetric = (metric) => ($) => $.metric === metric;
-
   it('should throw error in case the queue does not exists', async () => {
     const onError = jest.fn();
     try {
@@ -35,5 +33,24 @@ describe('v1DocumentDetails', () => {
     );
     const r1 = await global.get(`/api/v1/queues/q1/doc/${doc.rows[0].subject}`);
     expect(r1.data.doc.subject).toBe(doc.rows[0].subject);
+    expect(r1.data.prevDoc).toBe(null);
+    expect(r1.data.nextDoc).toBe(null);
+  });
+
+  it('should load a document details', async () => {
+    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    const prevDoc = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{}')`,
+    );
+    const doc = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{}')`,
+    );
+    const nextDoc = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{}')`,
+    );
+    const r1 = await global.get(`/api/v1/queues/q1/doc/${doc.rows[0].subject}`);
+    expect(r1.data.doc.subject).toBe(doc.rows[0].subject);
+    expect(r1.data.prevDoc).toBe(prevDoc.rows[0].subject);
+    expect(r1.data.nextDoc).toBe(nextDoc.rows[0].subject);
   });
 });

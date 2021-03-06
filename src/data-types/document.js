@@ -10,6 +10,10 @@ export const makeDocumentListItem = (rawData) => {
     createdAt,
     nextIteration,
     lastIteration,
+    version: Number(rawData.version),
+    attempts: Number(rawData.attempts),
+    iterations: Number(rawData.iterations),
+    payload: Object(rawData.payload),
   };
 };
 

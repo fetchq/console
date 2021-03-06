@@ -3,10 +3,8 @@ import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import LoadingView from './views/LoadingView';
 import LoginView from './views/LoginView';
 import Dashboard from './views/Dashboard';
-// import TasksList from './views/TasksList';
-// import CreateTask from './views/CreateTask';
-// import EditTask from './views/EditTask';
 import QueueDetailsView from './views/QueueDetailsView';
+import DocumentDetailsView from './views/DocumentDetailsView';
 import SecretAlert from './containers/SecretAlert';
 import { useAuth } from './state/use-auth';
 import AppBar from './containers/AppBar';
@@ -50,9 +48,11 @@ export default function App() {
       <AppBar />
       <Switch>
         <Route path="/" exact component={Dashboard} />
-        {/* <Route path="/tasks/new" component={CreateTask} />
-        <Route path="/task/:groupName/:taskName/edit" component={EditTask} /> */}
-        <Route path="/queues/:name" component={QueueDetailsView} />
+        <Route
+          path="/queues/:queueName/doc/:docSubject"
+          component={DocumentDetailsView}
+        />
+        <Route path="/queues/:queueName" component={QueueDetailsView} />
       </Switch>
     </Router>
   );

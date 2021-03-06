@@ -1,5 +1,5 @@
 import { useGet } from './use-get';
-import { makeDocumentDetails } from '../data-types/queue';
+import { makeDocumentDetails } from '../data-types/document';
 
 export const useDocumentDetails = (queue, subject) => {
   const [info, { fetch: reload }] = useGet(

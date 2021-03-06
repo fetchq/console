@@ -51,6 +51,8 @@ module.exports = {
               ],
               additionalProperties: false,
             },
+            prevDoc: { type: 'string', nullable: true },
+            nextDoc: { type: 'string', nullable: true },
             _sql: { type: 'string' },
           },
           required: ['doc'],

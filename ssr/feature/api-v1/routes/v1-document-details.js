@@ -9,12 +9,12 @@ const v1DocumentDetails = {
     const fetchq = request.getContext('fetchq');
 
     try {
-      const _sql = `
+      const _sqlDoc = `
         SELECT * FROM "fetchq_data"."${params.name}__docs"
         WHERE "subject" = '${params.subject}'
         `;
 
-      const res = await fetchq.pool.query(_sql);
+      const res = await fetchq.pool.query(_sqlDoc);
 
       // Handle subject or queue not existing
       if (!res.rowCount) {
@@ -28,15 +28,41 @@ const v1DocumentDetails = {
         });
       }
 
+      const doc = res.rows[0];
+      const nextIteration = String(doc.next_iteration.toISOString());
+
+      const _sqlPrev = `
+        SELECT "subject" FROM "fetchq_data"."${params.name}__docs"
+        WHERE status IN (0, 1, 2)
+          AND next_iteration < '${nextIteration}'
+          AND subject != '${doc.subject}'
+        LIMIT 1;
+      `;
+
+      const _sqlNext = `
+        SELECT "subject" FROM "fetchq_data"."${params.name}__docs"
+        WHERE status IN (0, 1, 2)
+          AND next_iteration > '${nextIteration}'
+          AND subject != '${doc.subject}'
+        LIMIT 1;
+      `;
+
+      const edges = await Promise.all([
+        fetchq.pool.query(_sqlPrev),
+        fetchq.pool.query(_sqlNext),
+      ]);
+
       reply.send({
         success: true,
         data: {
-          doc: res.rows[0],
-          _sql,
+          doc,
+          prevDoc: edges[0].rowCount ? edges[0].rows[0].subject : null,
+          nextDoc: edges[1].rowCount ? edges[1].rows[0].subject : null,
+          _sql: [_sqlDoc, _sqlPrev, _sqlNext].join('\n'),
         },
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       reply.status(404).send({
         success: false,
         errors: [{ message: `queue "${params.name}" does not exists` }],
