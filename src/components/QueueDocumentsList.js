@@ -14,8 +14,13 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 import DisplayDate from '../components/DisplayDate';
 
-const QueueDocumentsList = ({ items, pagination, loadPage, onDocPlay }) => {
-  const onDisclose = (doc) => console.log(doc);
+const QueueDocumentsList = ({
+  items,
+  pagination,
+  loadPage,
+  onDocPlay,
+  onDocDisclose,
+}) => {
   const onPageChange = (evt, offset) => loadPage(offset - 1);
 
   return (
@@ -56,7 +61,7 @@ const QueueDocumentsList = ({ items, pagination, loadPage, onDocPlay }) => {
           <TableBody>
             {items.map((doc) => {
               return (
-                <TableRow key={doc.subject} onClick={() => onDisclose(doc)}>
+                <TableRow key={doc.subject} onClick={() => onDocDisclose(doc)}>
                   <TableCell>{doc.subject}</TableCell>
                   <TableCell>
                     <DisplayDate date={doc.createdAt} />

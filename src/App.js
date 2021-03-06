@@ -23,7 +23,7 @@ export default function App() {
           <span role="img" aria-label="error">
             ⛔️
           </span>{' '}
-          Fetchq CRON
+          Fetchq CONSOLE
         </h4>
         <p>
           There seems to be a network problem.

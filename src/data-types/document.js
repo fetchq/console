@@ -12,3 +12,9 @@ export const makeDocumentListItem = (rawData) => {
     lastIteration,
   };
 };
+
+export const makeDocumentDetails = (rawData) => {
+  return {
+    ...makeDocumentListItem(rawData),
+  };
+};
