@@ -8,7 +8,7 @@
     "___// Development Utilities //___": "",
     "start": "node ssr/index.js",
     "start:api": "nodemon --watch ssr ssr/index.js",
-    "start:app": "react-scripts start",
+    "start:app": "./node_modules/.bin/react-scripts start",
     "start:styleguide": "styleguidist server",
     "start:gitpod:api": "NODE_ENV=development FETCHQ_CORS_ORIGIN=$(gp url 3000) nodemon --watch ssr ssr/index.js",
     "start:gitpod:app": "REACT_APP_SERVER_URL=$(gp url 8080) react-scripts start",
@@ -17,10 +17,10 @@
     "test": "npm run test:client && npm run test:unit",
     "test:e2e": "./node_modules/.bin/jest --projects test/templates/e2e --runInBand --testTimeout=10000",
     "test:unit": "./node_modules/.bin/jest --projects test/templates/unit",
-    "test:client": "react-scripts test --watchAll=false",
+    "test:client": "./node_modules/.bin/react-scripts test --watchAll=false",
     "tdd:e2e": "./node_modules/.bin/jest --projects test/templates/e2e --runInBand --watchAll --testTimeout=10000",
     "tdd:unit": "jest --projects test/templates/unit --watchAll",
-    "tdd:client": "react-scripts test",
+    "tdd:client": "./node_modules/.bin/react-scripts test",
     "___// Production Utilities //___": "",
     "build": "react-scripts build"
   },
@@ -36,12 +36,12 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.2",
     "generate-password": "1.6.0",
     "axios": "^0.21.1",
     "cron-parser": "3.2.0"
   },
   "devDependencies": {
+    "react-scripts": "4.0.2",
     "moment": "^2.29.1",
     "nodemon": "1.18.3",
     "react-styleguidist": "^11.1.5"
