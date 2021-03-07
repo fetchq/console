@@ -5,3 +5,9 @@ export const error = PropTypes.shape({
 });
 
 export const errors = PropTypes.arrayOf(error);
+
+export const makeErrorListItem = (error) => {
+  return {
+    message: String(error.message),
+  };
+};

@@ -36,7 +36,7 @@ const v1DocumentDetails = {
         WHERE status IN (0, 1, 2)
           AND next_iteration < '${nextIteration}'
           AND subject != '${doc.subject}'
-        ORDER BY "next_iteration" ASC
+        ORDER BY "next_iteration" DESC
         LIMIT 1;
       `;
 

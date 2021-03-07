@@ -57,4 +57,26 @@ describe('v1DocumentDetails', () => {
     expect(r1.data.prevDoc).toBe(prevDoc.rows[0].subject);
     expect(r1.data.nextDoc).toBe(nextDoc.rows[0].subject);
   });
+
+  it('should correctly calculate the prev document', async () => {
+    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    const firstDoc = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{}')`,
+    );
+    const prevDoc = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{}')`,
+    );
+    const doc = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{}')`,
+    );
+    const nextDoc = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{}')`,
+    );
+    const r1 = await global.get(
+      `/api/v1/queues/q1/docs/${doc.rows[0].subject}`,
+    );
+    expect(r1.data.doc.subject).toBe(doc.rows[0].subject);
+    expect(r1.data.prevDoc).toBe(prevDoc.rows[0].subject);
+    expect(r1.data.nextDoc).toBe(nextDoc.rows[0].subject);
+  });
 });

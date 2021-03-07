@@ -27,6 +27,9 @@ const DocumentDetailsView = ({
       {' | '}
       {nextDoc && <Link to={`/queues/${queueName}/docs/${nextDoc}`}>next</Link>}
       <pre>{JSON.stringify(foo, null, 2)}</pre>
+      {prevDoc}
+      <br />
+      {nextDoc}
     </AppLayout>
   );
 };
