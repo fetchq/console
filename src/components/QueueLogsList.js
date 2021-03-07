@@ -12,8 +12,7 @@ import Pagination from '@material-ui/lab/Pagination';
 
 import DisplayDate from '../components/DisplayDate';
 
-const QueueLogsList = ({ items, pagination, loadPage }) => {
-  const onDisclose = (doc) => console.log(doc);
+const QueueLogsList = ({ items, pagination, loadPage, onLogDisclose }) => {
   const onPageChange = (evt, offset) => loadPage(offset - 1);
 
   return (
@@ -53,7 +52,7 @@ const QueueLogsList = ({ items, pagination, loadPage }) => {
           <TableBody>
             {items.map((log) => {
               return (
-                <TableRow key={log.id} onClick={() => onDisclose(log)}>
+                <TableRow key={log.id} onClick={() => onLogDisclose(log)}>
                   <TableCell>
                     <DisplayDate date={log.createdAt} />
                   </TableCell>

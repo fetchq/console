@@ -10,3 +10,5 @@ export const makeLogListItem = (rawData) => {
     refId: rawData.ref_id ? String(rawData.ref_id) : '',
   };
 };
+
+export const makeLogDetails = (...args) => makeLogListItem(...args);

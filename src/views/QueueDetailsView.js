@@ -24,6 +24,9 @@ const QueueDetailsView = ({
   const onDocDisclose = (doc) =>
     history.push(`/queues/${queueName}/docs/${doc.subject}`);
 
+  const onLogDisclose = (log) =>
+    history.push(`/queues/${queueName}/logs/${log.id}`);
+
   return (
     <AppLayout
       titleProps={{
@@ -37,7 +40,9 @@ const QueueDetailsView = ({
       {documents.hasData && (
         <QueueDocumentsList {...documents} onDocDisclose={onDocDisclose} />
       )}
-      {logs.hasData && <QueueLogsList {...logs} />}
+      {logs.hasData && (
+        <QueueLogsList {...logs} onLogDisclose={onLogDisclose} />
+      )}
       <pre>{JSON.stringify(info, null, 2)}</pre>
     </AppLayout>
   );

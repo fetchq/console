@@ -5,6 +5,7 @@ import LoginView from './views/LoginView';
 import Dashboard from './views/Dashboard';
 import QueueDetailsView from './views/QueueDetailsView';
 import DocumentDetailsView from './views/DocumentDetailsView';
+import LogDetailsView from './views/LogDetailsView';
 import SecretAlert from './containers/SecretAlert';
 import { useAuth } from './state/use-auth';
 import AppBar from './containers/AppBar';
@@ -51,6 +52,10 @@ export default function App() {
         <Route
           path="/queues/:queueName/docs/:docSubject"
           component={DocumentDetailsView}
+        />
+        <Route
+          path="/queues/:queueName/logs/:logId"
+          component={LogDetailsView}
         />
         <Route path="/queues/:queueName" component={QueueDetailsView} />
       </Switch>
