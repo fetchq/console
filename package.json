@@ -21,6 +21,7 @@
     "tdd:e2e": "./node_modules/.bin/jest --projects test/templates/e2e --runInBand --watchAll --testTimeout=10000",
     "tdd:unit": "jest --projects test/templates/unit --watchAll",
     "tdd:client": "./node_modules/.bin/react-scripts test",
+    "seed": "./node_modules/.bin/jest --projects test/templates/seed --runInBand --testTimeout=10000",
     "___// Production Utilities //___": "",
     "build": "react-scripts build"
   },
