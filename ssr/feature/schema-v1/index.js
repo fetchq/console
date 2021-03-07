@@ -17,6 +17,13 @@ const resetFetchq = async (fetchq) => {
       last_iteration = NULL, 
       next_iteration = NOW()`,
   );
+
+  await fetchq.pool.query(`
+    BEGIN;
+    DROP SCHEMA IF EXISTS fetchq_data CASCADE;
+    CREATE SCHEMA IF NOT EXISTS fetchq_data;
+    COMMIT;
+  `);
 };
 
 module.exports = ({ registerAction }) => {
