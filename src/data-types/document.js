@@ -7,6 +7,7 @@ export const makeDocumentListItem = (rawData) => {
 
   return {
     subject: String(rawData.subject),
+    status: Number(rawData.status),
     createdAt,
     nextIteration,
     lastIteration,

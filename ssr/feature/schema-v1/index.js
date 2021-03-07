@@ -1,4 +1,5 @@
 const { FEATURE_NAME } = require('./hooks');
+const schema = require('./schema');
 
 // Destroys all queues and performs a hard reset on
 // metrics and all related tables
@@ -28,13 +29,30 @@ const resetFetchq = async (fetchq) => {
 
 module.exports = ({ registerAction }) => {
   registerAction({
+    hook: '$FETCHQ_READY',
+    name: FEATURE_NAME,
+    handler: async (_, { getContext }) => {
+      try {
+        const fetchq = getContext('fetchq');
+        const query = fetchq.pool.query.bind(fetchq.pool);
+        await schema.create(query);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+
+  registerAction({
     hook: '$TDD_POSTGRESQL_RESET?',
     name: FEATURE_NAME,
     handler: async (_, { getContext }) => {
       try {
         console.info('@TEST: reset schema/v1');
         const fetchq = getContext('fetchq');
+        const query = fetchq.pool.query.bind(fetchq.pool);
         await resetFetchq(fetchq);
+        await schema.destroy(query);
+        await schema.create(query);
       } catch (err) {
         console.log(err);
       }

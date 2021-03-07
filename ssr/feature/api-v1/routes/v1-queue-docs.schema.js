@@ -52,6 +52,7 @@ module.exports = {
                 type: 'object',
                 properties: {
                   subject: { type: 'string' },
+                  status: { type: 'number' },
                   version: { type: 'number' },
                   priority: { type: 'number' },
                   attempts: { type: 'number' },
@@ -67,6 +68,7 @@ module.exports = {
                 },
                 required: [
                   'subject',
+                  'status',
                   'version',
                   'priority',
                   'attempts',

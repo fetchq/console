@@ -51,6 +51,7 @@ const QueueDocumentsList = ({
           <TableHead>
             <TableRow>
               <TableCell>Subject</TableCell>
+              <TableCell align="center">Status</TableCell>
               <TableCell>Created At</TableCell>
               <TableCell>Last Run At</TableCell>
               <TableCell>Next Run</TableCell>
@@ -63,6 +64,7 @@ const QueueDocumentsList = ({
               return (
                 <TableRow key={doc.subject} onClick={() => onDocDisclose(doc)}>
                   <TableCell>{doc.subject}</TableCell>
+                  <TableCell align="center">{doc.status}</TableCell>
                   <TableCell>
                     <DisplayDate date={doc.createdAt} />
                   </TableCell>

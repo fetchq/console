@@ -18,6 +18,7 @@ const serviceTdd = require('./service/service-tdd');
  */
 
 const featureSchemaV1 = require('./feature/schema-v1');
+const featureFunctionsV1 = require('./feature/functions-v1');
 const featureApiV1 = require('./feature/api-v1');
 const featureAuthV1 = require('./feature/auth-v1');
 
@@ -48,6 +49,7 @@ runHookApp({
   ],
   features: [
     ...(useApi ? [featureSchemaV1] : []),
+    ...(useApi ? [featureFunctionsV1] : []),
     ...(useApi ? [featureApiV1] : []),
     ...(useApi ? [featureAuthV1] : []),
   ],
