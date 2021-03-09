@@ -1,7 +1,7 @@
 {
   "name": "console",
   "organization": "fetchq",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Manage your Fetchq cluster like a PRO",
   "main": "ssr/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "tdd:client": "./node_modules/.bin/react-scripts test",
     "seed": "./node_modules/.bin/jest --projects test/templates/seed --runInBand --testTimeout=10000",
     "___// Production Utilities //___": "",
-    "build": "react-scripts build"
+    "build": "./node_modules/.bin/react-scripts build"
   },
   "dependencies": {
     "@forrestjs/package-fastify": "3.20.2",

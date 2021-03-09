@@ -22,7 +22,7 @@ FROM node:13.10-alpine AS builder
 WORKDIR /usr/src/app-build
 ADD package.json /usr/src/app-build
 ADD package-lock.json /usr/src/app-build
-RUN npm install --only=production
+RUN npm install
 
 # Copy source files:
 WORKDIR /usr/src/app-build
