@@ -1,0 +1,21 @@
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { useQueueDocs } from '../state/use-queue-docs';
+import QueueDocumentsList from '../components/QueueDocumentsList';
+
+const QueueDocsView = ({
+  match: {
+    params: { queueName },
+  },
+}) => {
+  const history = useHistory();
+  const documents = useQueueDocs(queueName);
+
+  const onDocDisclose = (doc) =>
+    history.push(`/queues/${queueName}/docs/${doc.subject}`);
+
+  return <QueueDocumentsList {...documents} onDocDisclose={onDocDisclose} />;
+};
+
+export default QueueDocsView;

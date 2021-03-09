@@ -1,31 +1,21 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 
 import { useQueueDetails } from '../state/use-queue-details';
-import { useQueueDocs } from '../state/use-queue-docs';
-import { useQueueLogs } from '../state/use-queue-logs';
+
 import AppLayout from '../layouts/AppLayout';
 import QueueDetailsInfo from '../components/QueueDetailsInfo';
-import QueueDocumentsList from '../components/QueueDocumentsList';
-import QueueLogsList from '../components/QueueLogsList';
+import QueueDocsView from './QueueDocsView';
+import QueueLogsView from './QueueLogsView';
 
 const QueueDetailsView = ({
   match: {
     params: { queueName },
   },
 }) => {
-  const history = useHistory();
   const { queue, metrics, hasData, reload, ...info } = useQueueDetails(
     queueName,
   );
-  const documents = useQueueDocs(queueName);
-  const logs = useQueueLogs(queueName);
-
-  const onDocDisclose = (doc) =>
-    history.push(`/queues/${queueName}/docs/${doc.subject}`);
-
-  const onLogDisclose = (log) =>
-    history.push(`/queues/${queueName}/logs/${log.id}`);
 
   return (
     <AppLayout
@@ -37,13 +27,17 @@ const QueueDetailsView = ({
       {hasData && (
         <QueueDetailsInfo queue={queue} metrics={metrics} reload={reload} />
       )}
-      {documents.hasData && (
-        <QueueDocumentsList {...documents} onDocDisclose={onDocDisclose} />
-      )}
-      {logs.hasData && (
-        <QueueLogsList {...logs} onLogDisclose={onLogDisclose} />
-      )}
+
+      <Link to={`/queues/${queueName}/docs`}>Documents</Link>
+      {' | '}
+      <Link to={`/queues/${queueName}/logs`}>Logs</Link>
+
       <pre>{JSON.stringify(info, null, 2)}</pre>
+
+      <Switch>
+        <Route path="/queues/:queueName/docs" component={QueueDocsView} />
+        <Route path="/queues/:queueName/logs" component={QueueLogsView} />
+      </Switch>
     </AppLayout>
   );
 };
