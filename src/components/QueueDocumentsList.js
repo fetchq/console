@@ -24,7 +24,7 @@ const QueueDocumentsList = ({
   const onPageChange = (evt, offset) => loadPage(offset - 1);
 
   return (
-    <div style={{ marginTop: 40 }}>
+    <div style={{ marginTop: 10 }}>
       <div
         style={{
           marginBottom: 15,
@@ -33,7 +33,7 @@ const QueueDocumentsList = ({
           alignItems: 'flex-end',
         }}
       >
-        <Typography variant="h4" component="h2">
+        <Typography variant="h6" component="h2">
           Documents
         </Typography>
         <Pagination
