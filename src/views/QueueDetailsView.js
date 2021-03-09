@@ -49,8 +49,17 @@ const QueueDetailsView = ({
     <AppLayout
       titleProps={{
         title: `Queue: ${queueName}`,
-        backTo: '/',
       }}
+      breadCrumb={[
+        {
+          label: 'queues',
+          href: '/',
+        },
+        {
+          label: queueName,
+          href: `/queues/${queueName}`,
+        },
+      ]}
     >
       <div className={classes.root}>
         <Route

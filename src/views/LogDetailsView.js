@@ -10,14 +10,31 @@ const LogDetailsView = ({
   },
 }) => {
   const { log, nextLog, prevLog, ...foo } = useLogDetails(queueName, logId);
-  console.log(foo);
+
   return (
     <AppLayout
       titleProps={{
         title: 'Log Details',
         subtitle: queueName,
-        backTo: `/queues/${queueName}`,
       }}
+      breadCrumb={[
+        {
+          label: 'queues',
+          href: '/',
+        },
+        {
+          label: queueName,
+          href: `/queues/${queueName}`,
+        },
+        {
+          label: 'logs',
+          href: `/queues/${queueName}/logs`,
+        },
+        {
+          label: logId,
+          href: `/queues/${queueName}/logs/${logId}`,
+        },
+      ]}
     >
       <pre>{JSON.stringify(log, null, 2)}</pre>
       {prevLog && <Link to={`/queues/${queueName}/logs/${prevLog}`}>prev</Link>}

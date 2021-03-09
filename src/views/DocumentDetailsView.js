@@ -19,8 +19,25 @@ const DocumentDetailsView = ({
       titleProps={{
         title: docSubject,
         subtitle: queueName,
-        backTo: `/queues/${queueName}`,
       }}
+      breadCrumb={[
+        {
+          label: 'queues',
+          href: '/',
+        },
+        {
+          label: queueName,
+          href: `/queues/${queueName}`,
+        },
+        {
+          label: 'docs',
+          href: `/queues/${queueName}/docs`,
+        },
+        {
+          label: docSubject,
+          href: `/queues/${queueName}/docs/${docSubject}`,
+        },
+      ]}
     >
       <pre>{JSON.stringify(doc, null, 2)}</pre>
       {prevDoc && <Link to={`/queues/${queueName}/docs/${prevDoc}`}>prev</Link>}
