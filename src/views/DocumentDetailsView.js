@@ -11,7 +11,7 @@ const DocumentDetailsView = ({
     params: { queueName, docSubject },
   },
 }) => {
-  const { doc, nextDoc, prevDoc, ...foo } = useDocumentDetails(
+  const { doc, nextDoc, prevDoc, ...docInfo } = useDocumentDetails(
     queueName,
     docSubject,
   );
@@ -41,14 +41,16 @@ const DocumentDetailsView = ({
         },
       ]}
     >
-      <pre>{JSON.stringify(doc, null, 2)}</pre>
-      {prevDoc && <Link to={`/queues/${queueName}/docs/${prevDoc}`}>prev</Link>}
-      {' | '}
+      {prevDoc && (
+        <>
+          <Link to={`/queues/${queueName}/docs/${prevDoc}`}>prev</Link>
+          {' | '}
+        </>
+      )}
       {nextDoc && <Link to={`/queues/${queueName}/docs/${nextDoc}`}>next</Link>}
-      <pre>{JSON.stringify(foo, null, 2)}</pre>
-      {prevDoc}
-      <br />
-      {nextDoc}
+      <h2>Document:</h2>
+      <pre>{JSON.stringify(doc, null, 2)}</pre>
+      <pre>{JSON.stringify(docInfo, null, 2)}</pre>
       <hr />
       <QueueLogsList queueName={queueName} subject={docSubject} />
     </AppLayout>
