@@ -4,7 +4,9 @@ const retrieveDocuments = async (query, params, fetchq) => {
   const sql = [];
   const where = [];
 
-  sql.push(`SELECT * FROM "fetchq_data"."${params.name}__docs"`);
+  sql.push(
+    `SELECT subject, status, version, priority, attempts, iterations, next_iteration, created_at, last_iteration FROM "fetchq_data"."${params.name}__docs"`,
+  );
 
   // if (query.cursor) {
   //   where.push(
@@ -69,7 +71,7 @@ const v1QueueDocs = {
         },
       });
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       reply.status(404).send({
         success: false,
         errors: [{ message: `queue "${params.name}" does not exists` }],

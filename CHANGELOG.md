@@ -4,6 +4,7 @@
 
 - Improve _UUID_ display with a short version
 - Display the associated document's details within the log's page
+- Remove _payload_ from the document list data
 
 ## v0.0.6
 
