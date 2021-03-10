@@ -40,6 +40,8 @@ const LogDetailsView = ({
       {prevLog && <Link to={`/queues/${queueName}/logs/${prevLog}`}>prev</Link>}
       {' | '}
       {nextLog && <Link to={`/queues/${queueName}/logs/${nextLog}`}>next</Link>}
+      {' | '}
+      <Link to={`/queues/${queueName}/docs/${log.subject}`}>Open Document</Link>
       <pre>{JSON.stringify(foo, null, 2)}</pre>
       {prevLog}
       <br />
