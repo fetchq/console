@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 
 import DisplayDate from '../components/DisplayDate';
+import ShortUUID from '../components/ShortUUID';
 
 const QueueDocumentsList = ({
   items,
@@ -55,7 +56,6 @@ const QueueDocumentsList = ({
               <TableCell>Created At</TableCell>
               <TableCell>Last Run At</TableCell>
               <TableCell>Next Run</TableCell>
-              <TableCell>payload</TableCell>
               <TableCell align="right">actions</TableCell>
             </TableRow>
           </TableHead>
@@ -63,7 +63,9 @@ const QueueDocumentsList = ({
             {items.map((doc) => {
               return (
                 <TableRow key={doc.subject} onClick={() => onDocDisclose(doc)}>
-                  <TableCell>{doc.subject}</TableCell>
+                  <TableCell>
+                    <ShortUUID uuid={doc.subject} />
+                  </TableCell>
                   <TableCell align="center">{doc.status}</TableCell>
                   <TableCell>
                     <DisplayDate date={doc.createdAt} />
@@ -74,7 +76,6 @@ const QueueDocumentsList = ({
                   <TableCell>
                     <DisplayDate date={doc.nextIteration} />
                   </TableCell>
-                  <TableCell>{JSON.stringify(doc.payload, null, 2)}</TableCell>
                   <TableCell>
                     <IconButton
                       aria-label="play"

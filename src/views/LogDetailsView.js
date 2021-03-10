@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useLogDetails } from '../state/use-log-details';
+import { useDocumentDetails } from '../state/use-document-details';
 import AppLayout from '../layouts/AppLayout';
 
 const LogDetailsView = ({
@@ -9,13 +10,16 @@ const LogDetailsView = ({
     params: { queueName, logId },
   },
 }) => {
-  const { log, nextLog, prevLog, ...foo } = useLogDetails(queueName, logId);
+  const { log, nextLog, prevLog, ...logInfo } = useLogDetails(queueName, logId);
+  const { doc, ...docInfo } = useDocumentDetails(queueName, log.subject);
+
+  console.log(doc);
 
   return (
     <AppLayout
       titleProps={{
-        title: 'Log Details',
-        subtitle: queueName,
+        title: queueName,
+        subtitle: 'Log Details',
       }}
       breadCrumb={[
         {
@@ -36,16 +40,18 @@ const LogDetailsView = ({
         },
       ]}
     >
-      <pre>{JSON.stringify(log, null, 2)}</pre>
       {prevLog && <Link to={`/queues/${queueName}/logs/${prevLog}`}>prev</Link>}
       {' | '}
       {nextLog && <Link to={`/queues/${queueName}/logs/${nextLog}`}>next</Link>}
       {' | '}
+      <h2>Log Details</h2>L
       <Link to={`/queues/${queueName}/docs/${log.subject}`}>Open Document</Link>
-      <pre>{JSON.stringify(foo, null, 2)}</pre>
-      {prevLog}
-      <br />
-      {nextLog}
+      <pre>{JSON.stringify(log, null, 2)}</pre>
+      <pre>{JSON.stringify(logInfo, null, 2)}</pre>
+      <hr />
+      <h2>Document</h2>
+      <pre>{JSON.stringify(doc, null, 2)}</pre>
+      <pre>{JSON.stringify(docInfo, null, 2)}</pre>
     </AppLayout>
   );
 };

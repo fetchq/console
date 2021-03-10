@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const QueueDetailsView = ({
   match: {
-    params: { queueName },
+    params: { queueName, section },
   },
 }) => {
   const history = useHistory();
@@ -38,6 +38,14 @@ const QueueDetailsView = ({
   const { queue, metrics, hasData, reload, ...info } = useQueueDetails(
     queueName,
   );
+
+  const sectionId = section || 'dashboard';
+  const sectionName =
+    section === 'dashboard'
+      ? 'Dashboard'
+      : section === 'docs'
+      ? 'Documents'
+      : 'Logs';
 
   const linkTo = (panel) => (e) => {
     e.preventDefault();
@@ -48,7 +56,8 @@ const QueueDetailsView = ({
   return (
     <AppLayout
       titleProps={{
-        title: `Queue: ${queueName}`,
+        title: queueName,
+        subtitle: sectionName,
       }}
       breadCrumb={[
         {
@@ -62,41 +71,32 @@ const QueueDetailsView = ({
       ]}
     >
       <div className={classes.root}>
-        <Route
-          path="/queues/:queueName/:panelName?"
-          render={({
-            match: {
-              params: { panelName = 'dashboard' },
-            },
-          }) => (
-            <Tabs
-              value={panelName}
-              textColor="primary"
-              indicatorColor="primary"
-              orientation="vertical"
-              className={classes.tabs}
-            >
-              <Tab
-                value={'dashboard'}
-                component="a"
-                label="Dashboard"
-                onClick={linkTo('')}
-              />
-              <Tab
-                value={'docs'}
-                component="a"
-                label="Documents"
-                onClick={linkTo('docs')}
-              />
-              <Tab
-                value={'logs'}
-                component="a"
-                label="Logs"
-                onClick={linkTo('logs')}
-              />
-            </Tabs>
-          )}
-        />
+        <Tabs
+          value={sectionId}
+          textColor="primary"
+          indicatorColor="primary"
+          orientation="vertical"
+          className={classes.tabs}
+        >
+          <Tab
+            value={'dashboard'}
+            component="a"
+            label="Dashboard"
+            onClick={linkTo('')}
+          />
+          <Tab
+            value={'docs'}
+            component="a"
+            label="Documents"
+            onClick={linkTo('docs')}
+          />
+          <Tab
+            value={'logs'}
+            component="a"
+            label="Logs"
+            onClick={linkTo('logs')}
+          />
+        </Tabs>
         <div className={classes.panels}>
           <Switch>
             <Route

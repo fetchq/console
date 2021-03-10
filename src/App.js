@@ -57,7 +57,10 @@ export default function App() {
           path="/queues/:queueName/logs/:logId"
           component={LogDetailsView}
         />
-        <Route path="/queues/:queueName" component={QueueDetailsView} />
+        <Route
+          path="/queues/:queueName/:section?"
+          component={QueueDetailsView}
+        />
       </Switch>
     </Router>
   );

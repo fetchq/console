@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useDocumentDetails } from '../state/use-document-details';
 import AppLayout from '../layouts/AppLayout';
 import QueueLogsList from '../containers/QueueLogsList';
+import ShortUUID from '../components/ShortUUID';
 
 const DocumentDetailsView = ({
   match: {
@@ -18,8 +19,8 @@ const DocumentDetailsView = ({
   return (
     <AppLayout
       titleProps={{
-        title: docSubject,
-        subtitle: queueName,
+        title: queueName,
+        subtitle: docSubject,
       }}
       breadCrumb={[
         {
@@ -35,7 +36,7 @@ const DocumentDetailsView = ({
           href: `/queues/${queueName}/docs`,
         },
         {
-          label: docSubject,
+          label: <ShortUUID uuid={docSubject} />,
           href: `/queues/${queueName}/docs/${docSubject}`,
         },
       ]}

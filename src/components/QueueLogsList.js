@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Pagination from '@material-ui/lab/Pagination';
 
 import DisplayDate from '../components/DisplayDate';
+import ShortUUID from '../components/ShortUUID';
 
 const QueueLogsList = ({ items, pagination, loadPage, onLogDisclose }) => {
   const onPageChange = (evt, offset) => loadPage(offset - 1);
@@ -55,7 +56,7 @@ const QueueLogsList = ({ items, pagination, loadPage, onLogDisclose }) => {
                     <DisplayDate date={log.createdAt} />
                   </TableCell>
                   <TableCell>
-                    {log.subject}
+                    <ShortUUID uuid={log.subject} />
                     {log.refId && (
                       <>
                         <br />
