@@ -43,10 +43,8 @@ const QueueLogsList = ({ items, pagination, loadPage, onLogDisclose }) => {
           <TableHead>
             <TableRow>
               <TableCell>Created At</TableCell>
-              <TableCell>Subject</TableCell>
+              <TableCell>Reference</TableCell>
               <TableCell>message</TableCell>
-              <TableCell>refId</TableCell>
-              <TableCell>details</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -56,10 +54,18 @@ const QueueLogsList = ({ items, pagination, loadPage, onLogDisclose }) => {
                   <TableCell>
                     <DisplayDate date={log.createdAt} />
                   </TableCell>
-                  <TableCell>{log.subject}</TableCell>
+                  <TableCell>
+                    {log.subject}
+                    {log.refId && (
+                      <>
+                        <br />
+                        <small>
+                          <b>refId:</b> {log.refId}
+                        </small>
+                      </>
+                    )}
+                  </TableCell>
                   <TableCell>{log.message}</TableCell>
-                  <TableCell>{log.refId}</TableCell>
-                  <TableCell>{JSON.stringify(log.details, null, 2)}</TableCell>
                 </TableRow>
               );
             })}

@@ -1,14 +1,14 @@
 describe('v1QueueLogs', () => {
   beforeEach(global.resetSchema);
 
-  const rejectDoc = async (queue, msg, details) => {
+  const rejectDoc = async (queue, msg, details, refId) => {
     const res = await global.query(
       `SELECT * FROM fetchq.doc_pick('q1', 0, 1, '1ms')`,
     );
     await global.query(
       `SELECT * FROM fetchq.doc_reject('${queue}', '${
         res.rows[0].subject
-      }', '${msg}', '${JSON.stringify(details)}')`,
+      }', '${msg}', '${JSON.stringify(details)}', '${refId}')`,
     );
     await global.pause(1);
     await global.query(`SELECT * FROM fetchq.mnt()`);
@@ -19,15 +19,15 @@ describe('v1QueueLogs', () => {
     await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
     await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
 
-    await rejectDoc('q1', 'failed', { idx: 1 });
-    await rejectDoc('q1', 'failed', { idx: 2 });
-    await rejectDoc('q1', 'failed', { idx: 3 });
+    await rejectDoc('q1', 'failed', { idx: 1 }, 'a1');
+    await rejectDoc('q1', 'failed', { idx: 2 }, 'a2');
+    await rejectDoc('q1', 'failed', { idx: 3 }, 'a3');
 
     const r1 = await global.get('/api/v1/queues/q1/logs');
     expect(Array.isArray(r1.data.items)).toBe(true);
     expect(r1.data.items.length).toBe(3);
-    expect(r1.data.items[0].details.idx).toBe(3);
-    expect(r1.data.items[1].details.idx).toBe(2);
+    expect(r1.data.items[0].ref_id).toBe('a3');
+    expect(r1.data.items[1].ref_id).toBe('a2');
     expect(r1.data.pagination.count).toBe(3);
     expect(r1.data.pagination.limit).toBe(10);
     expect(r1.data.pagination.offset).toBe(0);
@@ -62,30 +62,30 @@ describe('v1QueueLogs', () => {
     await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
     await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
     for (let i = 0; i < 7; i++) {
-      await rejectDoc('q1', 'failed', { idx: i });
+      await rejectDoc('q1', 'failed', { idx: i }, `a${i}`);
     }
     await global.query(`SELECT * FROM fetchq.mnt()`);
 
     const r1 = await global.get('/api/v1/queues/q1/logs?limit=3');
     expect(r1.data.items.length).toBe(3);
-    expect(r1.data.items[0].details.idx).toBe(6);
-    expect(r1.data.items[1].details.idx).toBe(5);
-    expect(r1.data.items[2].details.idx).toBe(4);
+    expect(r1.data.items[0].ref_id).toBe('a6');
+    expect(r1.data.items[1].ref_id).toBe('a5');
+    expect(r1.data.items[2].ref_id).toBe('a4');
 
     const r2 = await global.get(
       `/api/v1/queues/q1/logs?limit=3&offset=${r1.data.pagination.offset + 1}`,
     );
 
-    expect(r2.data.items[0].details.idx).toBe(3);
-    expect(r2.data.items[1].details.idx).toBe(2);
-    expect(r2.data.items[2].details.idx).toBe(1);
+    expect(r2.data.items[0].ref_id).toBe('a3');
+    expect(r2.data.items[1].ref_id).toBe('a2');
+    expect(r2.data.items[2].ref_id).toBe('a1');
 
     const r3 = await global.get(
       `/api/v1/queues/q1/logs?limit=3&offset=${r2.data.pagination.offset + 1}`,
     );
 
     expect(r3.data.items.length).toBe(1);
-    expect(r3.data.items[0].details.idx).toBe(0);
+    expect(r3.data.items[0].ref_id).toBe('a0');
   });
 
   it('should accept a filter on the subject', async () => {
@@ -107,7 +107,6 @@ describe('v1QueueLogs', () => {
       `/api/v1/queues/q1/logs?subject=${r1.rows[0].subject}`,
     );
 
-    console.log(r3);
     expect(r3.data.items.length).toBe(1);
     expect(r3.data.pagination.count).toBe(1);
   });

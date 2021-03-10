@@ -4,7 +4,9 @@ const retrieveItems = async (query, params, fetchq) => {
   const sql = [];
   const where = [];
 
-  sql.push(`SELECT * FROM "fetchq_data"."${params.name}__logs"`);
+  sql.push(
+    `SELECT id, created_at, subject, message, ref_id FROM "fetchq_data"."${params.name}__logs"`,
+  );
 
   // TODO: validate for SQL injection
   if (query.subject) {
