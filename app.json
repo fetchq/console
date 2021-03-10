@@ -1,9 +1,9 @@
 {
-  "name": "Fetchq",
+  "name": "Fetchq CONSOLE",
   "description": "Fetchq REST API and Console application",
   "repository": "https://github.com/fetchq/console",
   "logo": "https://raw.githubusercontent.com/fetchq/console/main/public/fetchq-icon.png",
-  "keywords": ["fetchq", "queue", "tasks", "postgres"],
+  "keywords": ["fetchq", "console", "scheduler", "queue", "tasks", "postgres"],
   "success_url": "/",
   "env": {
     "FETCHQ_CONSOLE_PASSWORD": {
