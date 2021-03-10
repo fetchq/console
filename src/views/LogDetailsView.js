@@ -13,8 +13,6 @@ const LogDetailsView = ({
   const { log, nextLog, prevLog, ...logInfo } = useLogDetails(queueName, logId);
   const { doc, ...docInfo } = useDocumentDetails(queueName, log.subject);
 
-  console.log(doc);
-
   return (
     <AppLayout
       titleProps={{
