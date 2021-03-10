@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { useDocumentDetails } from '../state/use-document-details';
 import AppLayout from '../layouts/AppLayout';
+import QueueLogsList from '../containers/QueueLogsList';
 
 const DocumentDetailsView = ({
   match: {
@@ -13,7 +14,7 @@ const DocumentDetailsView = ({
     queueName,
     docSubject,
   );
-  console.log(foo);
+
   return (
     <AppLayout
       titleProps={{
@@ -47,6 +48,8 @@ const DocumentDetailsView = ({
       {prevDoc}
       <br />
       {nextDoc}
+      <hr />
+      <QueueLogsList queueName={queueName} subject={docSubject} />
     </AppLayout>
   );
 };
