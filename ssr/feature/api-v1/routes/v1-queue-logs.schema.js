@@ -21,6 +21,9 @@ module.exports = {
         default: 'desc',
         enum: ['desc', 'asc'],
       },
+      subject: {
+        type: 'string',
+      },
     },
   },
   response: {

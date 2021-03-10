@@ -88,6 +88,30 @@ describe('v1QueueLogs', () => {
     expect(r3.data.items[0].details.idx).toBe(0);
   });
 
+  it('should accept a filter on the subject', async () => {
+    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    const r1 = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`,
+    );
+    const r2 = await global.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`,
+    );
+    await global.query(
+      `SELECT FROM fetchq.log_error('q1', '${r1.rows[0].subject}', 'err1', '{}')`,
+    );
+    await global.query(
+      `SELECT FROM fetchq.log_error('q1', '${r2.rows[0].subject}', 'err2', '{}')`,
+    );
+
+    const r3 = await global.get(
+      `/api/v1/queues/q1/logs?subject=${r1.rows[0].subject}`,
+    );
+
+    console.log(r3);
+    expect(r3.data.items.length).toBe(1);
+    expect(r3.data.pagination.count).toBe(1);
+  });
+
   // Should test that the pagination holds on when data is dropped by the logs
   // due to the weak calculations of the amount of documents in the table
 });

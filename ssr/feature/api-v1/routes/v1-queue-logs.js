@@ -6,11 +6,10 @@ const retrieveItems = async (query, params, fetchq) => {
 
   sql.push(`SELECT * FROM "fetchq_data"."${params.name}__logs"`);
 
-  // if (query.cursor) {
-  //   where.push(
-  //     `${query.order} ${query.dir === 'asc' ? '>' : '<'} '${query.cursor}'`,
-  //   );
-  // }
+  // TODO: validate for SQL injection
+  if (query.subject) {
+    where.push(`subject = '${query.subject}'`);
+  }
 
   if (where.length) {
     sql.push(`WHERE`);
@@ -38,7 +37,10 @@ const retrieveItems = async (query, params, fetchq) => {
  * For the purpose of paginating the logs table, this should be just fine :-)
  */
 const retrievePagination = async (query, params, items, fetchq) => {
-  const _sql = `SELECT MAX("id") - MIN("id") + 1 AS count FROM "fetchq_data"."${params.name}__logs"`;
+  const _sql = query.subject
+    ? `SELECT COUNT(*) AS count FROM "fetchq_data"."${params.name}__logs" WHERE "subject" = '${query.subject}'`
+    : `SELECT MAX("id") - MIN("id") + 1 AS count FROM "fetchq_data"."${params.name}__logs"`;
+
   const result = await fetchq.pool.query(_sql);
 
   return [
