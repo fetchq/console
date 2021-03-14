@@ -11,7 +11,7 @@ const v1QueueDocumentDrop = {
     try {
       const _sql = `
         DELETE FROM "fetchq_data"."${params.name}__docs"
-        WHERE "subject" = '${params.subject}'
+        WHERE "subject" = '${params.subject}';
       `;
       const res = await fetchq.pool.query(_sql);
 
@@ -27,6 +27,11 @@ const v1QueueDocumentDrop = {
         });
       }
 
+      // Log decrement of the amount of items in the queue
+      // this is useful to keep the pagination correct.
+      const _sqlCnt = `SELECT FROM "fetchq"."metric_log_decrement"('${params.name}', 'cnt', 1)`;
+      await fetchq.pool.query(_sqlCnt);
+
       // TODO: it should look into the status of the deleted document
       //       and update counters accordingly.
 
@@ -37,7 +42,7 @@ const v1QueueDocumentDrop = {
         },
       });
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       reply.status(404).send({
         success: false,
         errors: [{ message: `queue "${params.name}" does not exists` }],
