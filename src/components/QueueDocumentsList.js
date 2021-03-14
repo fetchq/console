@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Pagination from '@material-ui/lab/Pagination';
 import IconButton from '@material-ui/core/IconButton';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import DisplayDate from '../components/DisplayDate';
 import ShortUUID from '../components/ShortUUID';
@@ -19,10 +20,27 @@ const QueueDocumentsList = ({
   items,
   pagination,
   loadPage,
-  onDocPlay,
-  onDocDisclose,
+  onPlayDocument,
+  onDropDocument,
+  onDiscloseDocument,
 }) => {
   const onPageChange = (evt, offset) => loadPage(offset - 1);
+
+  const cancelEvt = (handler) => (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+    handler();
+  };
+
+  const dropHandler = (doc) => () => {
+    if (confirm(`Do you really want to PERMANENTLY DELETE this document?`)) {
+      onDropDocument(doc);
+    }
+  };
+
+  const playHandler = (doc) => () => {
+    onPlayDocument(doc);
+  };
 
   return (
     <div style={{ marginTop: 10 }}>
@@ -62,7 +80,10 @@ const QueueDocumentsList = ({
           <TableBody>
             {items.map((doc) => {
               return (
-                <TableRow key={doc.subject} onClick={() => onDocDisclose(doc)}>
+                <TableRow
+                  key={doc.subject}
+                  onClick={() => onDiscloseDocument(doc)}
+                >
                   <TableCell>
                     <ShortUUID uuid={doc.subject} />
                   </TableCell>
@@ -78,12 +99,14 @@ const QueueDocumentsList = ({
                   </TableCell>
                   <TableCell>
                     <IconButton
+                      aria-label="drop"
+                      onClick={cancelEvt(dropHandler(doc))}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton
                       aria-label="play"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onDocPlay(doc);
-                      }}
+                      onClick={cancelEvt(playHandler(doc))}
                     >
                       <PlayArrowIcon />
                     </IconButton>
@@ -109,6 +132,12 @@ const QueueDocumentsList = ({
       </div>
     </div>
   );
+};
+
+QueueDocumentsList.propTypes = {
+  onDiscloseDocument: PropTypes.func.isRequired,
+  onDropDocument: PropTypes.func.isRequired,
+  onPlayDocument: PropTypes.func.isRequired,
 };
 
 export default QueueDocumentsList;

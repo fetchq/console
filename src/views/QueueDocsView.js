@@ -12,10 +12,15 @@ const QueueDocsView = ({
   const history = useHistory();
   const documents = useQueueDocs(queueName);
 
-  const onDocDisclose = (doc) =>
+  const onDiscloseDocument = (doc) =>
     history.push(`/queues/${queueName}/docs/${doc.subject}`);
 
-  return <QueueDocumentsList {...documents} onDocDisclose={onDocDisclose} />;
+  return (
+    <QueueDocumentsList
+      {...documents}
+      onDiscloseDocument={onDiscloseDocument}
+    />
+  );
 };
 
 export default QueueDocsView;

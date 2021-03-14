@@ -9,8 +9,6 @@ export const useQueueDocs = (name, { limit = 10 } = {}) => {
     },
   });
 
-  // Used with custom URL in "onDocPlay()"
-  // should we just use axios here?
   const axios = useAxios();
 
   const hasData = Boolean(info.data);
@@ -26,7 +24,7 @@ export const useQueueDocs = (name, { limit = 10 } = {}) => {
       },
     });
 
-  const onDocPlay = (doc) =>
+  const onPlayDocument = (doc) =>
     axios.post(`/api/v1/queues/${name}/play/${doc.subject}`).then(() =>
       reload({
         keepData: true,
@@ -36,6 +34,17 @@ export const useQueueDocs = (name, { limit = 10 } = {}) => {
       }),
     );
 
+  const onDropDocument = (doc) => {
+    axios.post(`/api/v1/queues/${name}/drop/${doc.subject}`).then(() =>
+      reload({
+        keepData: true,
+        params: {
+          ...pagination,
+        },
+      }),
+    );
+  };
+
   return {
     isLoading: info.isLoading,
     hasData,
@@ -43,6 +52,7 @@ export const useQueueDocs = (name, { limit = 10 } = {}) => {
     pagination,
     reload,
     loadPage,
-    onDocPlay,
+    onPlayDocument,
+    onDropDocument,
   };
 };
