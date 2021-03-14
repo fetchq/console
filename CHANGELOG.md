@@ -6,6 +6,7 @@
 - Display the associated document's details within the log's page
 - Remove _payload_ from the document list data
 - Improve logs schema
+- Drop a queue and all its related contents
 
 ## v0.0.6
 
