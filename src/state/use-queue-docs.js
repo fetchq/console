@@ -1,5 +1,5 @@
 import { useGet } from './use-get';
-import { usePost } from './use-post';
+import { useAxios } from './use-axios';
 import { makeDocumentListItem } from '../data-types/document';
 
 export const useQueueDocs = (name, { limit = 10 } = {}) => {
@@ -11,7 +11,7 @@ export const useQueueDocs = (name, { limit = 10 } = {}) => {
 
   // Used with custom URL in "onDocPlay()"
   // should we just use axios here?
-  const [_, playApi] = usePost();
+  const axios = useAxios();
 
   const hasData = Boolean(info.data);
   const items = hasData ? info.data.items.map(makeDocumentListItem) : [];
@@ -27,16 +27,14 @@ export const useQueueDocs = (name, { limit = 10 } = {}) => {
     });
 
   const onDocPlay = (doc) =>
-    playApi
-      .send({}, undefined, `/api/v1/queues/${name}/play/${doc.subject}`)
-      .then(() =>
-        reload({
-          keepData: true,
-          params: {
-            ...pagination,
-          },
-        }),
-      );
+    axios.post(`/api/v1/queues/${name}/play/${doc.subject}`).then(() =>
+      reload({
+        keepData: true,
+        params: {
+          ...pagination,
+        },
+      }),
+    );
 
   return {
     isLoading: info.isLoading,

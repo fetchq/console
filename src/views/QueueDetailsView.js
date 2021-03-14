@@ -5,6 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import { useQueueDetails } from '../state/use-queue-details';
+import { useQueueDrop } from '../state/use-queue-drop';
 
 import AppLayout from '../layouts/AppLayout';
 import QueueDetailsInfo from '../components/QueueDetailsInfo';
@@ -19,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
-    // '& span.MuiTab-wrapper': {
-    //   alignItems: 'left',
-    // },
   },
   panels: {
     paddingLeft: 30,
@@ -38,6 +36,10 @@ const QueueDetailsView = ({
   const { queue, metrics, hasData, reload, ...info } = useQueueDetails(
     queueName,
   );
+  const { drop } = useQueueDrop({
+    onSuccess: () => history.push('/'),
+    onError: (err) => alert(err.message),
+  });
 
   const sectionId = section || 'dashboard';
   const sectionName =
@@ -108,7 +110,8 @@ const QueueDetailsView = ({
                     <QueueDetailsInfo
                       queue={queue}
                       metrics={metrics}
-                      reload={reload}
+                      onReload={reload}
+                      onDelete={drop}
                     />
                   )}
                   <pre>{JSON.stringify(info, null, 2)}</pre>
