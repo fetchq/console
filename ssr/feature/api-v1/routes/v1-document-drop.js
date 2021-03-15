@@ -1,5 +1,32 @@
 const schema = require('./v1-document-drop.schema');
 
+const getMetricsToDecrease = ({ status_prev, version_prev }) => {
+  const queries = ['cnt', `v${version_prev}`];
+
+  switch (status_prev) {
+    case 3:
+      queries.push('cpl');
+      break;
+    case 2:
+      queries.push('act');
+      break;
+    case 1:
+      queries.push('pnd');
+      break;
+    case 0:
+      queries.push('pln');
+      break;
+    case -1:
+      queries.push('kll');
+      break;
+  }
+
+  return queries;
+};
+
+const buildDecrementSql = (queueName) => (metric) =>
+  `SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', '${metric}', 1);`;
+
 const v1QueueDocumentDrop = {
   method: 'POST',
   url: '/api/v1/queues/:name/drop/:subject',
@@ -11,8 +38,10 @@ const v1QueueDocumentDrop = {
     try {
       const _sql = `
         DELETE FROM "fetchq_data"."${params.name}__docs"
-        WHERE "subject" = '${params.subject}';
+        WHERE "subject" = '${params.subject}'
+        RETURNING status AS status_prev, version AS version_prev;
       `;
+
       const res = await fetchq.pool.query(_sql);
 
       // Handle subject or queue not existing
@@ -27,18 +56,15 @@ const v1QueueDocumentDrop = {
         });
       }
 
-      // Log decrement of the amount of items in the queue
-      // this is useful to keep the pagination correct.
-      const _sqlCnt = `SELECT FROM "fetchq"."metric_log_decrement"('${params.name}', 'cnt', 1)`;
-      await fetchq.pool.query(_sqlCnt);
-
-      // TODO: it should look into the status of the deleted document
-      //       and update counters accordingly.
+      // Update the metrics according to the previous status of the document:
+      const toSql = buildDecrementSql(params.name);
+      const _sqlMetrics = getMetricsToDecrease(res.rows[0]).map(toSql).join('');
+      _sqlMetrics && (await fetchq.pool.query(_sqlMetrics));
 
       reply.send({
         success: true,
         data: {
-          _sql,
+          _sql: [_sql, ..._sqlMetrics].join('\n'),
         },
       });
     } catch (err) {

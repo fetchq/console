@@ -1,31 +1,33 @@
 const schema = require('./v1-document-play.schema');
 
-const getUpdateMetricsSql = (queueName, prevStatus) => {
-  if (prevStatus === 2) {
-    return `
-      SELECT FROM "fetchq"."metric_log_increment"('${queueName}', 'pnd', 1);
-      SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', 'act', 1);
-    `;
+const getUpdateMetricsSql = ({ status_prev }) => {
+  const increment = [];
+  const decrement = [];
+
+  switch (status_prev) {
+    case 3:
+      increment.push('pnd');
+      decrement.push('cpl');
+      break;
+    case 2:
+      increment.push('pnd');
+      decrement.push('act');
+      break;
+    case 0:
+      increment.push('pnd');
+      decrement.push('pln');
+      break;
+    case -1:
+      increment.push('pnd');
+      decrement.push('kll');
+      break;
   }
-  if (prevStatus === 0) {
-    return `
-      SELECT FROM "fetchq"."metric_log_increment"('${queueName}', 'pnd', 1);
-      SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', 'pln', 1);
-    `;
-  }
-  if (prevStatus === 3) {
-    return `
-      SELECT FROM "fetchq"."metric_log_increment"('${queueName}', 'pnd', 1);
-      SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', 'cpl', 1);
-    `;
-  }
-  if (prevStatus === -1) {
-    return `
-      SELECT FROM "fetchq"."metric_log_increment"('${queueName}', 'pnd', 1);
-      SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', 'kll', 1);
-    `;
-  }
+
+  return [increment, decrement];
 };
+
+const buildMetricSql = (queueName, action) => (metric) =>
+  `SELECT FROM "fetchq"."metric_log_${action}"('${queueName}', '${metric}', 1);`;
 
 /**
  * POST://api/v1/queues/:name/play/:subject
@@ -71,7 +73,12 @@ const v1QueueDocumentPlay = {
       const doc = res.rows[0];
 
       // Update the metrics according to the previous status of the document:
-      const _sqlMetrics = getUpdateMetricsSql(params.name, doc.status_prev);
+      const [increment, decrement] = getUpdateMetricsSql(doc);
+      const _sqlMetrics = [
+        ...increment.map(buildMetricSql(params.name, 'increment')),
+        ...decrement.map(buildMetricSql(params.name, 'decrement')),
+      ].join('');
+
       _sqlMetrics && (await fetchq.pool.query(_sqlMetrics));
 
       reply.send({
