@@ -24,6 +24,8 @@ module.exports = {
               properties: {
                 subject: { type: 'string' },
                 version: { type: 'number' },
+                status: { type: 'number' },
+                status_prev: { type: 'number' },
                 priority: { type: 'number' },
                 attempts: { type: 'number' },
                 iterations: { type: 'number' },
@@ -39,6 +41,8 @@ module.exports = {
               required: [
                 'subject',
                 'version',
+                'status',
+                'status_prev',
                 'priority',
                 'attempts',
                 'iterations',
