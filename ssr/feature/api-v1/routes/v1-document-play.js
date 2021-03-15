@@ -13,6 +13,18 @@ const getUpdateMetricsSql = (queueName, prevStatus) => {
       SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', 'pln', 1);
     `;
   }
+  if (prevStatus === 3) {
+    return `
+      SELECT FROM "fetchq"."metric_log_increment"('${queueName}', 'pnd', 1);
+      SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', 'cpl', 1);
+    `;
+  }
+  if (prevStatus === -1) {
+    return `
+      SELECT FROM "fetchq"."metric_log_increment"('${queueName}', 'pnd', 1);
+      SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', 'kll', 1);
+    `;
+  }
 };
 
 /**

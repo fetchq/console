@@ -90,4 +90,76 @@ describe('v1QueueDocumentPlay', () => {
     const m2 = await getQueueMetrics('q1');
     expect(m2).toEqual({ cnt: 1, ent: 1, pln: 0, pnd: 1, v0: 1 });
   });
+
+  it('should update counters from COMPLETED status', async () => {
+    await global.query(`SELECT FROM fetchq.queue_create('q1')`);
+    await global.query(`SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`);
+    await global.query(`SELECT FROM fetchq.doc_push('q1', 's1')`);
+    await global.query(`SELECT FROM fetchq.doc_pick('q1', 0, 1, '1y')`);
+    await global.query(`SELECT FROM fetchq.doc_complete('q1', 's1')`);
+    await global.query(`SELECT FROM fetchq.mnt()`);
+
+    const m1 = await getQueueMetrics('q1');
+    expect(m1).toEqual({
+      act: 0,
+      cnt: 1,
+      cpl: 1,
+      ent: 1,
+      pkd: 1,
+      pnd: 0,
+      prc: 1,
+      v0: 1,
+    });
+
+    await global.post('/api/v1/queues/q1/play/s1');
+    await global.query(`SELECT FROM fetchq.mnt()`);
+
+    const m2 = await getQueueMetrics('q1');
+    expect(m2).toEqual({
+      act: 0,
+      cnt: 1,
+      cpl: 0,
+      ent: 1,
+      pkd: 1,
+      pnd: 1,
+      prc: 1,
+      v0: 1,
+    });
+  });
+
+  it('should update counters from KILLED status', async () => {
+    await global.query(`SELECT FROM fetchq.queue_create('q1')`);
+    await global.query(`SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`);
+    await global.query(`SELECT FROM fetchq.doc_push('q1', 's1')`);
+    await global.query(`SELECT FROM fetchq.doc_pick('q1', 0, 1, '1y')`);
+    await global.query(`SELECT FROM fetchq.doc_kill('q1', 's1')`);
+    await global.query(`SELECT FROM fetchq.mnt()`);
+
+    const m1 = await getQueueMetrics('q1');
+    expect(m1).toEqual({
+      act: 0,
+      cnt: 1,
+      kll: 1,
+      ent: 1,
+      pkd: 1,
+      pnd: 0,
+      prc: 1,
+      v0: 1,
+    });
+
+    await global.post('/api/v1/queues/q1/play/s1');
+    await global.query(`SELECT FROM fetchq.mnt()`);
+
+    const m2 = await getQueueMetrics('q1');
+    expect(m2).toEqual({
+      act: 0,
+      cnt: 1,
+      kll: 0,
+      ent: 1,
+      pkd: 1,
+      pnd: 1,
+      prc: 1,
+      v0: 1,
+    });
+  });
 });
