@@ -1,7 +1,7 @@
 {
   "name": "console",
   "organization": "fetchq",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Manage your Fetchq cluster like a PRO",
   "main": "ssr/index.js",
   "scripts": {

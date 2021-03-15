@@ -8,8 +8,8 @@
 - Improve logs schema
 - Drop a queue and all its related contents
 - Drop a document from the queue
-- [wip] Update queue counters while "playing" a document
-- [pln] Update queue counters while dropping
+- Update queue counters while "playing" a document
+- Update queue counters while dropping
 
 ## v0.0.6
 
