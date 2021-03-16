@@ -1,5 +1,9 @@
 # Fetchq Console Changelog
 
+## v0.0.8
+
+- Create a new queue from Dashboard
+
 ## v0.0.7
 
 - Improve _UUID_ display with a short version

@@ -4,7 +4,7 @@ import { makeQueueListItem } from '../data-types/queue';
 const endpoint = '/api/v1/queues';
 
 export const useQueues = () => {
-  const [info] = useGet(endpoint);
+  const [info, api] = useGet(endpoint);
 
   const hasData = Boolean(info.data);
   const items = hasData ? info.data.items.map(makeQueueListItem) : [];
@@ -13,5 +13,6 @@ export const useQueues = () => {
     isLoading: info.isLoading,
     hasData,
     items,
+    reload: () => api.fetch({ keepData: true }),
   };
 };
