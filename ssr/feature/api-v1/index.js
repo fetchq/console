@@ -4,6 +4,7 @@ const { v1QueuesList } = require('./routes/v1-queues-list');
 const { v1QueueDetails } = require('./routes/v1-queue-details');
 const { v1QueueDocs } = require('./routes/v1-queue-docs');
 const { v1QueueLogs } = require('./routes/v1-queue-logs');
+const { v1QueueCreate } = require('./routes/v1-queue-create');
 const { v1QueueDrop } = require('./routes/v1-queue-drop');
 const { v1QueueDocumentPlay } = require('./routes/v1-document-play');
 const { v1QueueDocumentDrop } = require('./routes/v1-document-drop');
@@ -25,6 +26,7 @@ module.exports = ({ registerAction }) => {
         fastify.route(v1QueueLogs);
         fastify.route(v1QueueDetails);
         fastify.route(v1QueuesList);
+        fastify.route(v1QueueCreate);
         fastify.route(v1QueueDrop);
         done();
       });
