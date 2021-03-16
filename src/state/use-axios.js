@@ -2,20 +2,16 @@ import axios from 'axios';
 import { useState } from 'react';
 
 export const GET_METHODS = ['GET'];
-export const SERVER_URL = process.env.REACT_APP_SERVER_URL || '/';
+export const SERVER_URL = process.env.REACT_APP_SERVER_URL || '';
 export const DEFAULT_OPTIONS = { withCredentials: true };
 
-// TODO: unit test
-// /foobar -> false
-// //foobar -> true
-// http(s)://foobar => true
-export const isAbsoluteUrl = (url) => false;
+const ABSOLUTE_URL_REGEXP = /^https?:\/\//i;
+export const isAbsoluteUrl = (url) => ABSOLUTE_URL_REGEXP.test(url);
 
-// TODO: unit test
-// (/foo, /bar) > /foo/bar
-// (/foo/, /bar) > /foo/bar (deduplicate // in the middle)
-export const composeUrl = (...tokens) =>
-  tokens.join('/').replace(/([^:]\/)\/+/g, '$1');
+export const composeUrl = (...tokens) => {
+  const r1 = tokens.join('/').replace(/([^:])(\/\/+)/g, '$1/');
+  return r1.substr(0, 2) === '//' ? r1.substr(1) : r1;
+};
 
 export const useAxios = (defaultOptions = DEFAULT_OPTIONS) => {
   const [called, setCalled] = useState(false);
