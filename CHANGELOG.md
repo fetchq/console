@@ -3,6 +3,7 @@
 ## v0.0.8
 
 - Create a new queue from Dashboard
+- [wip] Create a new document
 
 ## v0.0.7
 
