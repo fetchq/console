@@ -32,7 +32,7 @@ const buildMetricSql = (queueName, action) => (metric) =>
 /**
  * POST://api/v1/queues/:name/play/:subject
  */
-const v1QueueDocumentPlay = {
+const v1DocumentPlay = {
   method: 'POST',
   url: '/api/v1/queues/:name/play/:subject',
   schema,
@@ -98,4 +98,4 @@ const v1QueueDocumentPlay = {
   },
 };
 
-module.exports = { v1QueueDocumentPlay };
+module.exports = { v1DocumentPlay };

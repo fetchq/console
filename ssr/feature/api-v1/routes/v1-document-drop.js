@@ -27,7 +27,7 @@ const getMetricsToDecrease = ({ status_prev, version_prev }) => {
 const buildDecrementSql = (queueName) => (metric) =>
   `SELECT FROM "fetchq"."metric_log_decrement"('${queueName}', '${metric}', 1);`;
 
-const v1QueueDocumentDrop = {
+const v1DocumentDrop = {
   method: 'POST',
   url: '/api/v1/queues/:name/drop/:subject',
   schema,
@@ -77,4 +77,4 @@ const v1QueueDocumentDrop = {
   },
 };
 
-module.exports = { v1QueueDocumentDrop };
+module.exports = { v1DocumentDrop };
