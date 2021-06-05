@@ -1,12 +1,12 @@
 const { Replay10Outlined } = require('@material-ui/icons');
 
 describe('v1QueueDrop', () => {
-  beforeEach(global.resetSchema);
+  beforeEach(global.fetchq.resetState);
 
   it('should drop an existing queue', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
-    await global.query(`SELECT * FROM fetchq.mnt()`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
 
     // The queue should be deleted
     const r1 = await global.delete('/api/v1/queues/q1');

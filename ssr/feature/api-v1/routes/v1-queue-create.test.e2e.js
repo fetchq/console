@@ -1,5 +1,5 @@
 describe('v1QueueCreate', () => {
-  beforeEach(global.resetSchema);
+  beforeEach(global.fetchq.resetState);
 
   const q1 = { name: 'q1' };
 

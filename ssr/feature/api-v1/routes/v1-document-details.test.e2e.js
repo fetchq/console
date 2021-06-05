@@ -1,5 +1,5 @@
 describe('v1DocumentDetails', () => {
-  beforeEach(global.resetSchema);
+  beforeEach(global.fetchq.resetState);
 
   it('should throw error in case the queue does not exists', async () => {
     const onError = jest.fn();
@@ -14,7 +14,7 @@ describe('v1DocumentDetails', () => {
   });
 
   it('should throw error in case the document does not exists', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
     const onError = jest.fn();
     try {
       await global.get('/api/v1/queues/q1/docs/foobar');
@@ -27,8 +27,8 @@ describe('v1DocumentDetails', () => {
   });
 
   it('should load a document details', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    const doc = await global.query(
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    const doc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
     const r1 = await global.get(
@@ -40,14 +40,14 @@ describe('v1DocumentDetails', () => {
   });
 
   it('should load a document details', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    const prevDoc = await global.query(
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    const prevDoc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
-    const doc = await global.query(
+    const doc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
-    const nextDoc = await global.query(
+    const nextDoc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
     const r1 = await global.get(
@@ -59,17 +59,17 @@ describe('v1DocumentDetails', () => {
   });
 
   it('should correctly calculate the prev document', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    const firstDoc = await global.query(
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    const firstDoc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
-    const prevDoc = await global.query(
+    const prevDoc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
-    const doc = await global.query(
+    const doc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
-    const nextDoc = await global.query(
+    const nextDoc = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{}')`,
     );
     const r1 = await global.get(

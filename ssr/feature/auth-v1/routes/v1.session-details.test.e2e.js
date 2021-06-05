@@ -1,123 +1,128 @@
-const axios = require('axios');
 
 describe('v1/session/details', () => {
-  const PWD_PATH = 'app.auth.console.password';
-  const { TEST_SERVER_ROOT } = global.env;
+  const mockPassword = async (value = null) => {
+    const PWD_PATH = 'app.auth.console.password';
+    const { value: currentPassword} = await global.get(`/test/config?key=${PWD_PATH}`)
+    await global.post(`/test/config`, { key: PWD_PATH, value})
+
+    return mockPassword.resetMock = () => {
+      mockPassword.resetMock = null
+      return global.post(`/test/config`, { key: PWD_PATH, value: currentPassword})
+    }
+  }
+
+  afterEach(async() => {
+    if (mockPassword.resetMock) {
+      await mockPassword.resetMock()
+    }
+  })
 
   it('should receive a dummy session for a non secured instance', async () => {
-    const resetPasswdSettings = await global.mockAppConfig(PWD_PATH, null);
-    const res = await axios.get(`${TEST_SERVER_ROOT}/api/v1/session`);
-    await resetPasswdSettings();
-
-    expect(res.data.success).toBe(true);
-    expect(res.data.data.groups[0]).toBe('*');
+    await mockPassword(null);
+    const res = await global.get(`/api/v1/session`);
+    expect(res.success).toBe(true);
+    expect(res.data.groups[0]).toBe('*');
   });
 
   it('should receive an error for a secured instance and no login', async () => {
-    const resetPasswdSettings = await global.mockAppConfig(PWD_PATH, 'foobar');
-    const res = await axios.get(`${TEST_SERVER_ROOT}/api/v1/session?q=1`);
-    await resetPasswdSettings();
-
-    expect(res.data.success).toBe(false);
-    expect(res.data.errors[0].message).toBe('missing auth token');
+    await mockPassword('foobar');
+    const res = await global.get(`/api/v1/session?q=1`);
+    expect(res.success).toBe(false);
+    expect(res.errors[0].message).toBe('missing auth token');
   });
 
   it('should validate a session via Authentication header', async () => {
-    const resetPasswdSettings = await global.mockAppConfig(PWD_PATH, 'foobar');
+    await mockPassword('foobar');
 
     // Obtain a valid session token by authentication method
-    const headerName = await global.getAppConfig('app.auth.header.name');
-    const r1 = await axios.post(`${TEST_SERVER_ROOT}/api/v1/session`, {
+    const { value: headerName } = await global.get(`/test/config?key=app.auth.header.name`)
+    const r1 = await global.post(`/api/v1/session`, {
       uname: 'console',
       passw: 'foobar',
     });
-
+    
     // Check the session status by forwarding the session token as a Header
-    const res = await axios.get(`${TEST_SERVER_ROOT}/api/v1/session?q=2`, {
+    const headerValue = `Bearer ${r1.data.token}`
+    const r2 = await global.get(`/api/v1/session?q=2`, {
       headers: {
-        [headerName]: `Bearer ${r1.data.data.token}`,
+        [headerName]: headerValue,
       },
     });
 
-    await resetPasswdSettings();
-
-    // console.log(res.data);
-    expect(res.data.success).toBe(true);
-    expect(res.data.data.groups[0]).toBe('*');
+    expect(r2.success).toBe(true);
+    expect(r2.data.groups[0]).toBe('*');
   });
 
   it('should validate a session via Cookie', async () => {
-    const resetPasswdSettings = await global.mockAppConfig(PWD_PATH, 'foobar');
+    await mockPassword('foobar');
+
     // Obtain a valid session token by authentication method
-    const cookieName = await global.getAppConfig('app.auth.cookie.name');
-    const r1 = await axios.post(`${TEST_SERVER_ROOT}/api/v1/session`, {
+    const { value: cookieName } = await global.get(`/test/config?key=app.auth.cookie.name`)
+
+    const r1 = await global.post(`/api/v1/session`, {
       uname: 'console',
       passw: 'foobar',
     });
 
     // Check the session status by forwarding the session token as a Cookie
-    const res = await axios.get(`${TEST_SERVER_ROOT}/api/v1/session?q=2`, {
+    const cookieValue = `${cookieName}=${r1.data.token}`
+    const r2 = await global.get(`/api/v1/session?q=2`, {
       headers: {
-        Cookie: `${cookieName}=${r1.data.data.token}`,
+        Cookie: cookieValue,
       },
     });
 
-    await resetPasswdSettings();
-
-    // console.log(res.data);
-    expect(res.data.success).toBe(true);
-    expect(res.data.data.groups[0]).toBe('*');
+    expect(r2.success).toBe(true);
+    expect(r2.data.groups[0]).toBe('*');
   });
 
   it('should validate a session via Query', async () => {
-    const resetPasswdSettings = await global.mockAppConfig(PWD_PATH, 'foobar');
+    await mockPassword('foobar');
 
     // Obtain a valid session token by authentication method
-    const queryParamName = await global.getAppConfig('app.auth.query.param');
-    const r1 = await axios.post(`${TEST_SERVER_ROOT}/api/v1/session`, {
+    const { value: queryParamName } = await global.get(`/test/config?key=app.auth.query.param`)
+
+    const r1 = await global.post(`/api/v1/session`, {
       uname: 'console',
       passw: 'foobar',
     });
 
     // Check the session status by forwarding the session token as a Query
-    const res = await axios.get(
-      `${TEST_SERVER_ROOT}/api/v1/session?${queryParamName}=${r1.data.data.token}`,
+    const queryParam = `${queryParamName}=${r1.data.token}`;
+    const r2 = await global.get(
+      `/api/v1/session?${queryParam}`,
     );
 
-    await resetPasswdSettings();
-
-    // console.log(res.data);
-    expect(res.data.success).toBe(true);
-    expect(res.data.data.groups[0]).toBe('*');
+    expect(r2.success).toBe(true);
+    expect(r2.data.groups[0]).toBe('*');
   });
 
   it('should fail to validate a session with a wrong signature', async () => {
-    const resetPasswdSettings = await global.mockAppConfig(PWD_PATH, 'foobar');
-    const headerName = await global.getAppConfig('app.auth.header.name');
-    const res = await axios.get(`${TEST_SERVER_ROOT}/api/v1/session?q=2`, {
+    await mockPassword('foobar');
+
+    const { value: headerName } = await global.get(`/test/config?key=app.auth.header.name`)
+    const r1 = await global.get(`/api/v1/session?q=2`, {
       headers: {
         [headerName]: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncm91cHMiOlsiKiJdLCJpYXQiOjE1ODM3NDI1NDUsImV4cCI6MTU4Mzc0MjU0N30.D3E7MPe_uB7TrI-gSwh1Ij_8mefX17AjeRqQ434K7yI`,
       },
     });
-    await resetPasswdSettings();
 
-    // console.log(res.data);
-    expect(res.data.success).toBe(false);
-    expect(res.data.errors[0].message).toBe('invalid signature');
+    // console.log(r.data);
+    expect(r1.success).toBe(false);
+    expect(r1.errors[0].message).toBe('invalid signature');
   });
 
   it('should fail to validate a session with an expired token', async () => {
-    const resetPasswdSettings = await global.mockAppConfig(PWD_PATH, 'foobar');
-    const headerName = await global.getAppConfig('app.auth.header.name');
-    const res = await axios.get(`${TEST_SERVER_ROOT}/api/v1/session?q=2`, {
+    await mockPassword('foobar');
+
+    const { value: headerName } = await global.get(`/test/config?key=app.auth.header.name`)
+    const r1 = await global.get(`/api/v1/session?q=2`, {
       headers: {
         [headerName]: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncm91cHMiOlsiKiJdLCJpYXQiOjE1ODM3NDI1NDUsImV4cCI6MTU4Mzc0MjU0N30.a1lfsngErvuS_zrY_iBboIcivcrU-UOGkxb9PwphKcs`,
       },
     });
-    await resetPasswdSettings();
 
-    // console.log(res.data);
-    expect(res.data.success).toBe(false);
-    expect(res.data.errors[0].message).toBe('invalid signature');
+    expect(r1.success).toBe(false);
+    expect(r1.errors[0].message).toBe('invalid signature');
   });
 });

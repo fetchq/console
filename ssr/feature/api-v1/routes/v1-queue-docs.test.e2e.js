@@ -1,11 +1,11 @@
 describe('v1QueueDocs', () => {
-  beforeEach(global.resetSchema);
+  beforeEach(global.fetchq.resetState);
 
   it('should list documents', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
-    await global.query(`SELECT * FROM fetchq.mnt()`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
     const r1 = await global.get('/api/v1/queues/q1/docs');
     expect(Array.isArray(r1.data.items)).toBe(true);
     expect(r1.data.items.length).toBe(2);
@@ -32,18 +32,18 @@ describe('v1QueueDocs', () => {
   });
 
   it('should handle an empty queue', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
     const r1 = await global.get('/api/v1/queues/q1/docs');
     expect(r1.data.items.length).toBe(0);
     expect(r1.data.pagination.count).toBe(0);
   });
 
   it('should handle pagination with default sorting', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
     for (let i = 0; i < 7; i++) {
-      await global.query(`SELECT * FROM fetchq.doc_push('q1', 'doc-${i}')`);
+      await global.fetchq.query(`SELECT * FROM fetchq.doc_push('q1', 'doc-${i}')`);
     }
-    await global.query(`SELECT * FROM fetchq.mnt()`);
+    await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
 
     const r1 = await global.get('/api/v1/queues/q1/docs?limit=3');
     expect(r1.data.items.length).toBe(3);
