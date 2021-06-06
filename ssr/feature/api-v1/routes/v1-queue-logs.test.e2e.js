@@ -1,5 +1,5 @@
 describe('v1QueueLogs', () => {
-  beforeEach(global.fetchq.resetState);
+  beforeEach(global.dropAllQueues)
 
   const rejectDoc = async (queue, msg, details, refId) => {
     const res = await global.fetchq.query(

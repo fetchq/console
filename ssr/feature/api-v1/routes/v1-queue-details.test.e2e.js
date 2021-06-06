@@ -1,5 +1,5 @@
 describe('v1QueueDetails', () => {
-  beforeEach(global.fetchq.resetState);
+  beforeEach(global.dropAllQueues)
 
   const getMetric = (metric) => ($) => $.metric === metric;
 

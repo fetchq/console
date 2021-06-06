@@ -1,5 +1,5 @@
 describe('v1QueueDocs', () => {
-  beforeEach(global.fetchq.resetState);
+  beforeEach(global.dropAllQueues)
 
   it('should list documents', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);

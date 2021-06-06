@@ -1,7 +1,5 @@
-const { Replay10Outlined } = require('@material-ui/icons');
-
 describe('v1QueueDrop', () => {
-  beforeEach(global.fetchq.resetState);
+  beforeEach(global.dropAllQueues)
 
   it('should drop an existing queue', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
