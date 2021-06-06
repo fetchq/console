@@ -39,7 +39,8 @@ const authenticateDecorator = async (request, reply) => {
 
   // Validate the token
   try {
-    request.auth = request.jwt.verify(token);
+    const { payload } = await request.jwt.verify(token);
+    request.auth = payload;
   } catch (err) {
     return reply.send({
       success: false,

@@ -1,5 +1,5 @@
 describe('v1QueueDetails', () => {
-  beforeEach(global.resetSchema);
+  beforeEach(global.dropAllQueues)
 
   const getMetric = (metric) => ($) => $.metric === metric;
 
@@ -16,9 +16,9 @@ describe('v1QueueDetails', () => {
   });
 
   it('should load a queue details', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{}')`);
-    await global.query(`SELECT * FROM fetchq.mnt()`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{}')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
     const r1 = await global.get('/api/v1/queues/q1');
     expect(r1.data.queue.name).toBe('q1');
     expect(r1.data.metrics.find(getMetric('cnt')).current_value).toBe(1);

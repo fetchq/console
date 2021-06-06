@@ -3,15 +3,13 @@ const { runHookApp } = require('@forrestjs/hooks');
 /**
  * Services
  */
+const serviceJwt = require('@forrestjs/service-jwt');
 const serviceFetchq = require('@forrestjs/service-fetchq');
 const serviceFastify = require('@forrestjs/service-fastify');
 const serviceFastifyCors = require('@forrestjs/service-fastify-cors');
 const serviceFastifyStatic = require('@forrestjs/service-fastify-static');
 const serviceFastifyCookie = require('@forrestjs/service-fastify-cookie');
-const serviceFastifyJwt = require('@forrestjs/service-fastify-jwt');
-const serviceFastifyFetchq = require('@forrestjs/service-fastify-fetchq');
 const serviceFastifyHealthz = require('@forrestjs/service-fastify-healthz');
-const serviceTdd = require('./service/service-tdd');
 
 /**
  * Features
@@ -38,14 +36,12 @@ runHookApp({
   trace: 'compact',
   services: [
     serviceFetchq,
+    ...(useApi ? [serviceJwt] : []),
     ...(useApi ? [serviceFastify] : []),
     ...(useApi ? [serviceFastifyCookie] : []),
-    ...(useApi ? [serviceFastifyJwt] : []),
     ...(useApi ? [serviceFastifyHealthz] : []),
     ...(useCors ? [serviceFastifyCors] : []),
     ...(useConsole ? [serviceFastifyStatic] : []),
-    ...(useApi ? [serviceFastifyFetchq] : []),
-    serviceTdd,
   ],
   features: [
     ...(useApi ? [featureSchemaV1] : []),

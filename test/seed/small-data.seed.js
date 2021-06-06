@@ -6,40 +6,40 @@ const {
 } = require('unique-names-generator');
 
 describe('Seed: Small Data', () => {
-  beforeEach(global.resetSchema);
+  beforeEach(global.fetchq.resetState);
 
   const queueCreate = (queue) =>
-    global.query(`SELECT * FROM fetchq.queue_create('${queue}')`);
+    global.fetchq.query(`SELECT * FROM fetchq.queue_create('${queue}')`);
 
   const docAppend = (queue, payload) =>
-    global.query(
+    global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('${queue}', '${JSON.stringify(
         payload,
       )}')`,
     );
 
   const docPick = async (queue, lock = '5s') => {
-    const res = await global.query(
+    const res = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_pick('${queue}', 0, 1, '${lock}')`,
     );
     return res.rows[0];
   };
 
   const docReschedule = (queue, doc, nextIteration = '1d') =>
-    global.query(
+    global.fetchq.query(
       `SELECT * FROM fetchq.doc_reschedule('${queue}', '${doc.subject}', NOW() + INTERVAL '${nextIteration}')`,
     );
 
   const docComplete = (queue, doc) =>
-    global.query(
+    global.fetchq.query(
       `SELECT * FROM fetchq.doc_complete('${queue}', '${doc.subject}')`,
     );
 
   const docKill = (queue, doc) =>
-    global.query(`SELECT * FROM fetchq.doc_kill('${queue}', '${doc.subject}')`);
+    global.fetchq.query(`SELECT * FROM fetchq.doc_kill('${queue}', '${doc.subject}')`);
 
   const docDrop = (queue, doc) =>
-    global.query(`SELECT * FROM fetchq.doc_drop('${queue}', '${doc.subject}')`);
+    global.fetchq.query(`SELECT * FROM fetchq.doc_drop('${queue}', '${doc.subject}')`);
 
   const docReject = (
     queue,
@@ -47,7 +47,7 @@ describe('Seed: Small Data', () => {
     message = 'rejected',
     details = { because: 'it was rejected' },
   ) =>
-    global.query(
+    global.fetchq.query(
       `SELECT * FROM fetchq.doc_reject('${queue}', '${
         doc.subject
       }', '${message}', '${JSON.stringify(details)}')`,
@@ -59,7 +59,7 @@ describe('Seed: Small Data', () => {
     message = 'error',
     details = { because: 'shit happens' },
   ) =>
-    global.query(
+    global.fetchq.query(
       `SELECT * FROM fetchq.log_error('${queue}', '${
         doc.subject
       }', '${message}', '${JSON.stringify(details)}')`,
@@ -133,7 +133,7 @@ describe('Seed: Small Data', () => {
                 reason: reason1,
               });
           }
-          await global.query('SELECT FROM fetchq.mnt()');
+          await global.fetchq.query('SELECT FROM fetchq.mnt()');
         } catch (err) {
           console.log(err);
           process.kill(-1);

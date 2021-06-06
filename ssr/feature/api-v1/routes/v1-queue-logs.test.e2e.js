@@ -1,23 +1,23 @@
 describe('v1QueueLogs', () => {
-  beforeEach(global.resetSchema);
+  beforeEach(global.dropAllQueues)
 
   const rejectDoc = async (queue, msg, details, refId) => {
-    const res = await global.query(
+    const res = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_pick('q1', 0, 1, '1ms')`,
     );
-    await global.query(
+    await global.fetchq.query(
       `SELECT * FROM fetchq.doc_reject('${queue}', '${
         res.rows[0].subject
       }', '${msg}', '${JSON.stringify(details)}', '${refId}')`,
     );
     await global.pause(1);
-    await global.query(`SELECT * FROM fetchq.mnt()`);
+    await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
   };
 
   it('should list existing logs', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
 
     await rejectDoc('q1', 'failed', { idx: 1 }, 'a1');
     await rejectDoc('q1', 'failed', { idx: 2 }, 'a2');
@@ -51,20 +51,20 @@ describe('v1QueueLogs', () => {
   });
 
   it('should handle an empty logs table', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
     const r1 = await global.get('/api/v1/queues/q1/logs');
     expect(r1.data.items.length).toBe(0);
     expect(r1.data.pagination.count).toBe(0);
   });
 
   it('should handle pagination', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
-    await global.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
+    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
     for (let i = 0; i < 7; i++) {
       await rejectDoc('q1', 'failed', { idx: i }, `a${i}`);
     }
-    await global.query(`SELECT * FROM fetchq.mnt()`);
+    await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
 
     const r1 = await global.get('/api/v1/queues/q1/logs?limit=3');
     expect(r1.data.items.length).toBe(3);
@@ -89,17 +89,17 @@ describe('v1QueueLogs', () => {
   });
 
   it('should accept a filter on the subject', async () => {
-    await global.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    const r1 = await global.query(
+    await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
+    const r1 = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`,
     );
-    const r2 = await global.query(
+    const r2 = await global.fetchq.query(
       `SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`,
     );
-    await global.query(
+    await global.fetchq.query(
       `SELECT FROM fetchq.log_error('q1', '${r1.rows[0].subject}', 'err1', '{}')`,
     );
-    await global.query(
+    await global.fetchq.query(
       `SELECT FROM fetchq.log_error('q1', '${r2.rows[0].subject}', 'err2', '{}')`,
     );
 

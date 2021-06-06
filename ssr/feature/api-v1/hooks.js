@@ -1,5 +1,2 @@
-const { FEATURE } = require('@forrestjs/hooks');
-
-const FEATURE_NAME = `${FEATURE} api-v1`;
-
+const FEATURE_NAME = `api-v1`;
 module.exports = { FEATURE_NAME };
