@@ -1,5 +1,10 @@
 # Fetchq Console Changelog
 
+## v0.0.9
+
+- Update project to ForrestJS v4.0.0
+- Update Fetchq to v4.0.0
+
 ## v0.0.8
 
 - Create a new queue from Dashboard

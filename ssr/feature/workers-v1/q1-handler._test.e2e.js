@@ -1,7 +1,7 @@
 const handler = require('./q1-handler');
 const fixture = require('./q1.fixture');
 
-const makeTask = task =>
+const makeTask = (task) =>
   JSON.parse(
     JSON.stringify(task).replace(
       /{{TEST_SERVER_ROOT}}/g,
@@ -9,7 +9,7 @@ const makeTask = task =>
     ),
   );
 
-const deepLog = arg => console.info(JSON.stringify(arg, null, 2));
+const deepLog = (arg) => console.info(JSON.stringify(arg, null, 2));
 const deepLogArgs = (...args) => deepLog(args);
 
 const makeHandlerWithReject = async (payload, debugFn) => {

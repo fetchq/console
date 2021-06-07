@@ -17,8 +17,8 @@ module.exports = ({ registerAction }) => {
     handler: ({ registerRoute }) => {
       const fixture = require('./q1.fixture');
       Object.values(fixture)
-        .map(fixture => fixture.handler)
-        .forEach(handler => registerRoute(handler));
+        .map((fixture) => fixture.handler)
+        .forEach((handler) => registerRoute(handler));
     },
   });
 };

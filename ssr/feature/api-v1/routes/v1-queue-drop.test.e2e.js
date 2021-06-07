@@ -1,9 +1,11 @@
 describe('v1QueueDrop', () => {
-  beforeEach(global.dropAllQueues)
+  beforeEach(global.dropAllQueues);
 
   it('should drop an existing queue', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
+    await global.fetchq.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`,
+    );
     await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
 
     // The queue should be deleted

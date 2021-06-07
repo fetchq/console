@@ -1,22 +1,26 @@
-
 describe('v1/session/create', () => {
   const PWD_PATH = 'app.auth.console.password';
-  
+
   const mockPassword = async (value = null) => {
-    const { value: currentPassword} = await global.get(`/test/config?key=${PWD_PATH}`)
-    await global.post(`/test/config`, { key: PWD_PATH, value})
+    const { value: currentPassword } = await global.get(
+      `/test/config?key=${PWD_PATH}`,
+    );
+    await global.post(`/test/config`, { key: PWD_PATH, value });
 
-    return mockPassword.resetMock = () => {
-      mockPassword.resetMock = null
-      return global.post(`/test/config`, { key: PWD_PATH, value: currentPassword})
-    }
-  }
+    return (mockPassword.resetMock = () => {
+      mockPassword.resetMock = null;
+      return global.post(`/test/config`, {
+        key: PWD_PATH,
+        value: currentPassword,
+      });
+    });
+  };
 
-  afterEach(async() => {
+  afterEach(async () => {
     if (mockPassword.resetMock) {
-      await mockPassword.resetMock()
+      await mockPassword.resetMock();
     }
-  })
+  });
 
   it('should authenticate without a password', async () => {
     await mockPassword(null);
@@ -73,7 +77,7 @@ describe('v1/session/create', () => {
 
   it('should deny authentication in case of a null secret and wrong', async () => {
     await mockPassword(null);
-    
+
     const res = await global.post(`/api/v1/session`, {
       uname: 'foobar',
       passw: '',

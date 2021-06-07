@@ -127,7 +127,7 @@ exports.f3 = {
   handler: {
     method: 'POST',
     url: '/worker/v1/q1/foo__t3',
-    handler: async request => {
+    handler: async (request) => {
       const { payload } = request.body;
       return {
         success: true,

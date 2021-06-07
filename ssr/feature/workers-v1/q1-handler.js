@@ -5,7 +5,7 @@ const {
 } = require('../../lib/validate-webhook-response');
 
 const actionHandlers = {
-  webhook: async doc => {
+  webhook: async (doc) => {
     const resolver = createFetchResolver({
       ...doc.payload.action.request,
 
@@ -67,7 +67,7 @@ const actionHandlers = {
   },
 };
 
-module.exports = async doc => {
+module.exports = async (doc) => {
   // console.log('>>', doc.subject);
 
   // Run the task's external action

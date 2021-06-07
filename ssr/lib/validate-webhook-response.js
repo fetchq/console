@@ -54,6 +54,6 @@ const validate = ajv.compile({
   },
 });
 
-const validateWebhookResponse = data => [validate(data), validate.errors];
+const validateWebhookResponse = (data) => [validate(data), validate.errors];
 
 module.exports = { validateWebhookResponse };

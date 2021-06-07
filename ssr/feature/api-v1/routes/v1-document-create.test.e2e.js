@@ -1,5 +1,5 @@
 describe('v1DocumentCreate', () => {
-  beforeEach(global.dropAllQueues)
+  beforeEach(global.dropAllQueues);
 
   it('should create a new document with a custom subject', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);

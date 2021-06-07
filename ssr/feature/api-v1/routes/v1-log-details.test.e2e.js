@@ -1,5 +1,5 @@
 describe('v1LogDetails', () => {
-  beforeEach(global.dropAllQueues)
+  beforeEach(global.dropAllQueues);
 
   it('should throw error in case the queue does not exists', async () => {
     const onError = jest.fn();

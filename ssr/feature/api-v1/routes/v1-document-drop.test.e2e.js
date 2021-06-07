@@ -11,7 +11,7 @@ const getQueueMetrics = async (queue) => {
 };
 
 describe('v1QueueDocumentDrop', () => {
-  beforeEach(global.dropAllQueues)
+  beforeEach(global.dropAllQueues);
 
   it('should drop an existing document', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
@@ -70,7 +70,9 @@ describe('v1QueueDocumentDrop', () => {
 
   it('should update counters from ACTIVE status', async () => {
     await global.fetchq.query(`SELECT FROM fetchq.queue_create('q1')`);
-    await global.fetchq.query(`SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`);
+    await global.fetchq.query(
+      `SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`,
+    );
     await global.fetchq.query(`SELECT FROM fetchq.doc_push('q1', 's1')`);
     await global.fetchq.query(`SELECT FROM fetchq.doc_pick('q1', 0, 1, '1y')`);
     await global.fetchq.query(`SELECT FROM fetchq.mnt()`);
@@ -87,7 +89,9 @@ describe('v1QueueDocumentDrop', () => {
 
   it('should update counters from PLANNED status', async () => {
     await global.fetchq.query(`SELECT FROM fetchq.queue_create('q1')`);
-    await global.fetchq.query(`SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`);
+    await global.fetchq.query(
+      `SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`,
+    );
     await global.fetchq.query(
       `SELECT FROM fetchq.doc_push('q1', 's1', 0, 0, NOW() + INTERVAL '1m', '{}')`,
     );
@@ -105,7 +109,9 @@ describe('v1QueueDocumentDrop', () => {
 
   it('should update counters from COMPLETED status', async () => {
     await global.fetchq.query(`SELECT FROM fetchq.queue_create('q1')`);
-    await global.fetchq.query(`SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`);
+    await global.fetchq.query(
+      `SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`,
+    );
     await global.fetchq.query(`SELECT FROM fetchq.doc_push('q1', 's1')`);
     await global.fetchq.query(`SELECT FROM fetchq.doc_pick('q1', 0, 1, '1y')`);
     await global.fetchq.query(`SELECT FROM fetchq.doc_complete('q1', 's1')`);
@@ -141,7 +147,9 @@ describe('v1QueueDocumentDrop', () => {
 
   it('should update counters from KILLED status', async () => {
     await global.fetchq.query(`SELECT FROM fetchq.queue_create('q1')`);
-    await global.fetchq.query(`SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`);
+    await global.fetchq.query(
+      `SELECT FROM fetchq.queue_set_max_attempts('q1', 1)`,
+    );
     await global.fetchq.query(`SELECT FROM fetchq.doc_push('q1', 's1')`);
     await global.fetchq.query(`SELECT FROM fetchq.doc_pick('q1', 0, 1, '1y')`);
     await global.fetchq.query(`SELECT FROM fetchq.doc_kill('q1', 's1')`);

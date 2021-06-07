@@ -4,7 +4,7 @@ const v1SessionDetails = {
   method: 'GET',
   url: '/api/v1/session',
   schema,
-  handler: async request => ({
+  handler: async (request) => ({
     success: true,
     data: request.auth,
   }),

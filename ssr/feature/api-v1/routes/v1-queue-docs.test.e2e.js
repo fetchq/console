@@ -1,10 +1,14 @@
 describe('v1QueueDocs', () => {
-  beforeEach(global.dropAllQueues)
+  beforeEach(global.dropAllQueues);
 
   it('should list documents', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
-    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`);
-    await global.fetchq.query(`SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`);
+    await global.fetchq.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{ "idx": 1 }')`,
+    );
+    await global.fetchq.query(
+      `SELECT * FROM fetchq.doc_append('q1', '{ "idx": 2 }')`,
+    );
     await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
     const r1 = await global.get('/api/v1/queues/q1/docs');
     expect(Array.isArray(r1.data.items)).toBe(true);
@@ -41,7 +45,9 @@ describe('v1QueueDocs', () => {
   it('should handle pagination with default sorting', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
     for (let i = 0; i < 7; i++) {
-      await global.fetchq.query(`SELECT * FROM fetchq.doc_push('q1', 'doc-${i}')`);
+      await global.fetchq.query(
+        `SELECT * FROM fetchq.doc_push('q1', 'doc-${i}')`,
+      );
     }
     await global.fetchq.query(`SELECT * FROM fetchq.mnt()`);
 
