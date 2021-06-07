@@ -8,7 +8,7 @@
   "env": {
     "FETCHQ_CONSOLE_PASSWORD": {
       "description": "A secret password for logging you into the web console.",
-      "required": false
+      "generator": "secret"
     },
     "NODE_ENV": {
       "description": "NodeJS environment, it might affect the amount of logging.",
@@ -17,6 +17,14 @@
     "PG_USE_SSL": {
       "description": "Forces Fetchq to connect to the PostgreSQL db using SSL.",
       "value": "true"
+    },
+    "JWT_SECRET": {
+      "description": "Used to secure your login to the Console, set it to a strong password.",
+      "generator": "secret"
+    },
+    "JWT_DURATION": {
+      "description": "Defines how long a login will be valid. The shorter the better.",
+      "value": "1d"
     }
   },
   "scripts": {
