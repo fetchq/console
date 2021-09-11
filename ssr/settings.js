@@ -42,6 +42,7 @@ module.exports = ({ setConfig, getConfig }) => {
   setConfig('app.auth.cookie.name', env.FETCHQ_AUTH_COOKIE_NAME);
   setConfig('app.auth.query.param', env.FETCHQ_AUTH_QUERY_NAME);
   setConfig('app.auth.header.name', env.FETCHQ_AUTH_HEADER_NAME);
+  setConfig('app.auth.jwt.scope', env.FETCHQ_JWT_SCOPE);
 
   // Heroku compatible port environment variable
   setConfig('fastify.port', env.FETCHQ_PORT || env.PORT || '8080');

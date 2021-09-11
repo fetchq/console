@@ -8,7 +8,7 @@
   "env": {
     "FETCHQ_CONSOLE_PASSWORD": {
       "description": "A secret password for logging you into the web console.",
-      "generator": "secret"
+      "required": false
     },
     "NODE_ENV": {
       "description": "NodeJS environment, it might affect the amount of logging.",

@@ -31,7 +31,7 @@ describe('v1/session/create', () => {
     });
 
     expect(res.data.success).toBe(true);
-    expect(res.data.data.groups[0]).toBe('*');
+    expect(res.data.data['x-fetchq-groups'][0]).toBe('*');
     expect(res.data.data.token.length).toBeGreaterThan(50);
     expect(res.headers['set-cookie'].some(($) => $.includes('auth='))).toBe(
       true,
@@ -46,7 +46,7 @@ describe('v1/session/create', () => {
     });
 
     expect(res.data.success).toBe(true);
-    expect(res.data.data.groups[0]).toBe('*');
+    expect(res.data.data['x-fetchq-groups'][0]).toBe('*');
     expect(res.data.data.token.length).toBeGreaterThan(50);
     expect(res.headers['set-cookie'].some(($) => $.includes('auth='))).toBe(
       true,

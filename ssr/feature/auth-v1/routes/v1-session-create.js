@@ -6,18 +6,18 @@ const getLoginDetails = async (secret, { uname, passw }) => {
   if (secret === null && uname === 'console' && passw === '') {
     return {
       jwtClaims: {
-        groups: ['*'],
-        secure: false,
+        'x-fetchq-groups': ['*'],
+        'x-fetchq-secure': false,
       },
       jwtOptions: {
         expiresIn: '5s',
       },
-      public: {
-        groups: ['*'],
-        secure: false,
-        iat: new Date(),
-        eat: new Date(Date.now() + ms('5s')),
-      },
+      iat: new Date(),
+      eat: new Date(Date.now() + ms('5s')),
+      // public: {
+      //   groups: ['*'],
+      //   secure: false,
+      // },
     };
   }
 
@@ -25,18 +25,18 @@ const getLoginDetails = async (secret, { uname, passw }) => {
   if (secret !== null && uname === 'console' && secret === passw) {
     return {
       jwtClaims: {
-        groups: ['*'],
-        secure: true,
+        'x-fetchq-groups': ['*'],
+        'x-fetchq-secure': true,
       },
       jwtOptions: {
         expiresIn: '2h',
       },
       iat: new Date(),
       eat: new Date(Date.now() + ms('2h')),
-      public: {
-        groups: ['*'],
-        secure: true,
-      },
+      // public: {
+      //   groups: ['*'],
+      //   secure: true,
+      // },
     };
   }
 
@@ -51,6 +51,7 @@ const v1SessionCreate = {
   schema,
   handler: async (request, reply) => {
     const { getConfig } = request;
+    const jwtScope = getConfig('app.auth.jwt.scope');
     const password = getConfig('app.auth.console.password');
     const cookieName = getConfig('app.auth.cookie.name');
     const cookieOptions = getConfig('fastify.cookie.options', {});
@@ -64,8 +65,11 @@ const v1SessionCreate = {
     }
 
     // Generate JWT
+    // the claims are scoped inside a custom scoped object so to let
+    // other application build a mixed JWT that can carry multiple
+    // types of claims (eg. Hasura + Fetchq)
     const { jwtClaims, jwtOptions } = details;
-    const token = await request.jwt.sign(jwtClaims, jwtOptions);
+    const token = await request.jwt.sign({ [jwtScope]: jwtClaims }, jwtOptions);
 
     // Send out secure cookie
     const expiryMs = ms(jwtOptions.expiresIn);
@@ -75,10 +79,12 @@ const v1SessionCreate = {
       expires: details.eat,
     });
 
+    // Send out the authentication response
+    // which carries the same information as of the generated JWT
     reply.send({
       success: true,
       data: {
-        ...details.public,
+        ...jwtClaims,
         iat: details.iat,
         eat: details.eat,
         token,
