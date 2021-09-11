@@ -11,7 +11,7 @@ const getQueueMetrics = async (queue) => {
 };
 
 describe('v1QueueDocumentPlay', () => {
-  beforeEach(global.dropAllQueues);
+  beforeEach(global.reset);
 
   it('should play an existing document', async () => {
     await global.fetchq.query(`SELECT * FROM fetchq.queue_create('q1')`);
