@@ -6,6 +6,7 @@
 - Update project to ForrestJS v4.0.0
 - Update Fetchq to v4.0.0
 - Added a customizable scope to the _JWT claims_
+- [wip] Updates E2E tests using latest ForrestJS best practices
 - [wip] Create a new document
 
 ## v0.0.7
