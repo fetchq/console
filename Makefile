@@ -23,6 +23,9 @@ stop:
 	@echo "-- Terminating Project..."
 	@humble down
 
+pgclean:
+	@sudo rm -rf .docker-data/postgres
+
 start-api:
 	@echo "-- Starting API..."
 	@humble up -d postgres

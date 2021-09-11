@@ -1,29 +1,10 @@
+const PWD_PATH = 'app.auth.console.password';
+
 describe('v1/session/create', () => {
-  const PWD_PATH = 'app.auth.console.password';
-
-  const mockPassword = async (value = null) => {
-    const { value: currentPassword } = await global.get(
-      `/test/config?key=${PWD_PATH}`,
-    );
-    await global.post(`/test/config`, { key: PWD_PATH, value });
-
-    return (mockPassword.resetMock = () => {
-      mockPassword.resetMock = null;
-      return global.post(`/test/config`, {
-        key: PWD_PATH,
-        value: currentPassword,
-      });
-    });
-  };
-
-  afterEach(async () => {
-    if (mockPassword.resetMock) {
-      await mockPassword.resetMock();
-    }
-  });
+  afterEach(global.mockConfig.reset);
 
   it('should authenticate without a password', async () => {
-    await mockPassword(null);
+    await global.mockConfig(PWD_PATH, null);
 
     const res = await global.rawPost(`/api/v1/session`, {
       uname: 'console',
@@ -39,7 +20,7 @@ describe('v1/session/create', () => {
   });
 
   it('should authenticate with a custom password', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
     const res = await global.rawPost(`/api/v1/session`, {
       uname: 'console',
       passw: 'foobar',
@@ -54,7 +35,7 @@ describe('v1/session/create', () => {
   });
 
   it('should deny authentication in case of a custom secret and wrong password', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
     const res = await global.post(`/api/v1/session`, {
       uname: 'console',
       passw: 'wtf',
@@ -65,7 +46,7 @@ describe('v1/session/create', () => {
   });
 
   it('should deny authentication in case of a custom secret and empty password', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
     const res = await global.post(`/api/v1/session`, {
       uname: 'console',
       passw: '',
@@ -76,7 +57,7 @@ describe('v1/session/create', () => {
   });
 
   it('should deny authentication in case of a null secret and wrong', async () => {
-    await mockPassword(null);
+    await global.mockConfig(PWD_PATH, null);
 
     const res = await global.post(`/api/v1/session`, {
       uname: 'foobar',

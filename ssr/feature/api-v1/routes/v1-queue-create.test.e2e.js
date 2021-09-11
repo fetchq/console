@@ -1,5 +1,5 @@
 describe('v1QueueCreate', () => {
-  beforeEach(global.dropAllQueues);
+  beforeEach(global.reset);
 
   const q1 = { name: 'q1' };
 

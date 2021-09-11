@@ -43,19 +43,17 @@ module.exports = ({ registerAction }) => {
   });
 
   registerAction({
-    hook: '$TDD_POSTGRESQL_RESET?',
+    hook: '$FASTIFY_TDD_RESET?',
     name: FEATURE_NAME,
-    handler: async (_, { getContext }) => {
-      try {
-        console.info('@TEST: reset schema/v1');
+    handler: ({ registerResetHandler }, { getContext }) => {
+      registerResetHandler(async () => {
+        console.info('@RESET: schema/v1');
         const fetchq = getContext('fetchq');
         const query = fetchq.pool.query.bind(fetchq.pool);
         await resetFetchq(fetchq);
         await schema.destroy(query);
         await schema.create(query);
-      } catch (err) {
-        console.log(err);
-      }
+      }, 'resetSchema');
     },
   });
 

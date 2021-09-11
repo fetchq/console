@@ -1,46 +1,28 @@
+const PWD_PATH = 'app.auth.console.password';
+
 describe('v1/session/details', () => {
-  const mockPassword = async (value = null) => {
-    const PWD_PATH = 'app.auth.console.password';
-    const { value: currentPassword } = await global.get(
-      `/test/config?key=${PWD_PATH}`,
-    );
-    await global.post(`/test/config`, { key: PWD_PATH, value });
-
-    return (mockPassword.resetMock = () => {
-      mockPassword.resetMock = null;
-      return global.post(`/test/config`, {
-        key: PWD_PATH,
-        value: currentPassword,
-      });
-    });
-  };
-
-  afterEach(async () => {
-    if (mockPassword.resetMock) {
-      await mockPassword.resetMock();
-    }
-  });
+  afterEach(global.mockConfig.reset);
 
   it('should receive a dummy session for a non secured instance', async () => {
-    await mockPassword(null);
+    await global.mockConfig(PWD_PATH, null);
     const res = await global.get(`/api/v1/session`);
     expect(res.success).toBe(true);
     expect(res.data.groups[0]).toBe('*');
   });
 
   it('should receive an error for a secured instance and no login', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
     const res = await global.get(`/api/v1/session?q=1`);
     expect(res.success).toBe(false);
     expect(res.errors[0].message).toBe('missing auth token');
   });
 
   it('should validate a session via Authentication header', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
 
     // Obtain a valid session token by authentication method
-    const { value: headerName } = await global.get(
-      `/test/config?key=app.auth.header.name`,
+    const { value: headerName } = await global.getConfig(
+      `app.auth.header.name`,
     );
     const r1 = await global.post(`/api/v1/session`, {
       uname: 'console',
@@ -60,11 +42,11 @@ describe('v1/session/details', () => {
   });
 
   it('should validate a session via Cookie', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
 
     // Obtain a valid session token by authentication method
-    const { value: cookieName } = await global.get(
-      `/test/config?key=app.auth.cookie.name`,
+    const { value: cookieName } = await global.getConfig(
+      `app.auth.cookie.name`,
     );
 
     const r1 = await global.post(`/api/v1/session`, {
@@ -85,11 +67,11 @@ describe('v1/session/details', () => {
   });
 
   it('should validate a session via Query', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
 
     // Obtain a valid session token by authentication method
-    const { value: queryParamName } = await global.get(
-      `/test/config?key=app.auth.query.param`,
+    const { value: queryParamName } = await global.getConfig(
+      `app.auth.query.param`,
     );
 
     const r1 = await global.post(`/api/v1/session`, {
@@ -106,10 +88,10 @@ describe('v1/session/details', () => {
   });
 
   it('should fail to validate a session with a wrong signature', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
 
-    const { value: headerName } = await global.get(
-      `/test/config?key=app.auth.header.name`,
+    const { value: headerName } = await global.getConfig(
+      `app.auth.header.name`,
     );
     const r1 = await global.get(`/api/v1/session?q=2`, {
       headers: {
@@ -123,10 +105,10 @@ describe('v1/session/details', () => {
   });
 
   it('should fail to validate a session with an expired token', async () => {
-    await mockPassword('foobar');
+    await global.mockConfig(PWD_PATH, 'foobar');
 
-    const { value: headerName } = await global.get(
-      `/test/config?key=app.auth.header.name`,
+    const { value: headerName } = await global.getConfig(
+      `app.auth.header.name`,
     );
     const r1 = await global.get(`/api/v1/session?q=2`, {
       headers: {
