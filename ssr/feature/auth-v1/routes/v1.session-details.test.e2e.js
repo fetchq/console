@@ -56,7 +56,7 @@ describe('v1/session/details', () => {
     });
 
     expect(r2.success).toBe(true);
-    expect(r2.data.groups[0]).toBe('*');
+    expect(r2.data['x-fetchq-groups'][0]).toBe('*');
   });
 
   it('should validate a session via Cookie', async () => {
@@ -81,7 +81,7 @@ describe('v1/session/details', () => {
     });
 
     expect(r2.success).toBe(true);
-    expect(r2.data.groups[0]).toBe('*');
+    expect(r2.data['x-fetchq-groups'][0]).toBe('*');
   });
 
   it('should validate a session via Query', async () => {
@@ -102,7 +102,7 @@ describe('v1/session/details', () => {
     const r2 = await global.get(`/api/v1/session?${queryParam}`);
 
     expect(r2.success).toBe(true);
-    expect(r2.data.groups[0]).toBe('*');
+    expect(r2.data['x-fetchq-groups'][0]).toBe('*');
   });
 
   it('should fail to validate a session with a wrong signature', async () => {

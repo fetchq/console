@@ -2,19 +2,6 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - name: Api
-    init: rm -rf ./.gitpod.lock && npm install && touch ./.gitpod.lock
-    command: HELLO=world
-      FETCHQ_CORS_ENABLED=true
-      FETCHQ_CORS_ORIGIN=$(gp url 3000)
-      npm run start:gitpod:api
-    openIn: bottom
-    openMode: tab-after
-  - name: App
-    init: echo "Awaiting NPM install..." && while ! find ./.gitpod.lock 2> /dev/null 1> /dev/null; do sleep 5; done
-    command: npm run start:gitpod:app
-    openIn: bottom
-    openMode: split-right
   - name: Styleguide
     init: echo "Awaiting NPM install..." && while ! find ./.gitpod.lock 2> /dev/null 1> /dev/null; do sleep 5; done
     command: npm run start:gitpod:styleguide
@@ -29,6 +16,19 @@ tasks:
     init: echo "Awaiting NPM install..." && while ! find ./.gitpod.lock 2> /dev/null 1> /dev/null; do sleep 5; done
     command: npm run tdd:e2e
     openIn: right
+    openMode: split-right
+  - name: Api
+    init: rm -rf ./.gitpod.lock && npm install && touch ./.gitpod.lock
+    command: HELLO=world
+      FETCHQ_CORS_ENABLED=true
+      FETCHQ_CORS_ORIGIN=$(gp url 3000)
+      npm run start:gitpod:api
+    openIn: bottom
+    openMode: tab-after
+  - name: App
+    init: echo "Awaiting NPM install..." && while ! find ./.gitpod.lock 2> /dev/null 1> /dev/null; do sleep 5; done
+    command: npm run start:gitpod:app
+    openIn: bottom
     openMode: split-right
 
 # ports:

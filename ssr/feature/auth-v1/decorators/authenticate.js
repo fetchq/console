@@ -16,6 +16,7 @@ const getRequestToken = (request) => {
 
 const authenticateDecorator = async (request, reply) => {
   const password = request.getConfig('app.auth.console.password');
+  const jwtScope = request.getConfig('app.auth.jwt.scope');
 
   // Dynamic session for a non authenticated instance
   if (password === null) {
@@ -37,10 +38,11 @@ const authenticateDecorator = async (request, reply) => {
     });
   }
 
-  // Validate the token
+  // Validate the token and export the claims into the request object
   try {
-    const { payload } = await request.jwt.verify(token);
-    request.auth = payload;
+    const payload = await request.jwt.verify(token);
+    const jwtClaims = payload[jwtScope];
+    request.auth = jwtClaims;
   } catch (err) {
     return reply.send({
       success: false,

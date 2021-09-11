@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     errorMsg: getErrorMsg(),
     hasChecked: !sessionInfo.isFirstLoading,
     hasAuth: auth !== null,
-    isSecured: auth ? auth.secure : null,
+    isSecured: auth ? auth['x-fetchq-secure'] : null,
     // Methods
     login,
   };

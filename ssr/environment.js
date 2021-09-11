@@ -44,10 +44,14 @@ const env = envalid.cleanEnv(process.env, {
   FETCHQ_AUTH_COOKIE_NAME: envalid.str({ default: 'auth' }),
   FETCHQ_AUTH_COOKIE_SECRET: envalid.str({ default: getRandomSecret() }),
   FETCHQ_JWT_SECRET: envalid.str({ default: getRandomSecret() }),
+  FETCHQ_JWT_SCOPE: envalid.str({
+    default: 'https://console.fetchq.com/jwt/claims',
+  }),
 
   // Service port on which expose the API and the app:
-  FETCHQ_PORT: envalid.num({ default: null }),
-  PORT: envalid.num({ default: null }),
+  // (newer version of Envalid doesn't allow for NULL defaults)
+  // FETCHQ_PORT: envalid.num({ default: null }),
+  // PORT: envalid.num({ default: null }),
 
   // CORS Settings
   FETCHQ_CORS_ENABLED: envalid.bool({ default: false }),
