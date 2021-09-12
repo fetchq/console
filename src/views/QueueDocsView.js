@@ -16,10 +16,13 @@ const QueueDocsView = ({
     history.push(`/queues/${queueName}/docs/${doc.subject}`);
 
   return (
-    <QueueDocumentsList
-      {...documents}
-      onDiscloseDocument={onDiscloseDocument}
-    />
+    <>
+      <QueueDocumentsList
+        {...documents}
+        onDiscloseDocument={onDiscloseDocument}
+      />
+      hoho
+    </>
   );
 };
 

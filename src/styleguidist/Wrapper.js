@@ -1,9 +1,9 @@
 import React from 'react';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import RsgWrapper from 'react-styleguidist/lib/client/rsg-components/Wrapper/Wrapper';
 import { MemoryRouter as Router } from 'react-router-dom';
 
-const theme = createMuiTheme();
+const theme = createTheme();
 
 const Wrapper = ({ children, ...rest }) => (
   <RsgWrapper {...rest}>
