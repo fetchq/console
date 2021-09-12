@@ -73,7 +73,7 @@ module.exports = ({ setConfig, getConfig }) => {
   // TODO: cors should be enabled only on demand
   //       need to better figure out the environment based configuration
   setConfig('fastify.cors', {
-    origin: process.env.FETCHQ_CORS_ORIGIN,
+    origin: env.FETCHQ_CORS_ORIGIN,
     credentials: true,
   });
 };

@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  api:
+    environment:
+      FETCHQ_CORS_ORIGIN: ${FETCHQ_CORS_ORIGIN:-http://localhost:3000}
+
+  app:
+    environment:
+      REACT_APP_SERVER_URL: ${REACT_APP_SERVER_URL:-http://localhost:8080}
