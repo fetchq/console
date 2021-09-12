@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '../forms/components/TextField';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: 'relative',
   },
@@ -27,6 +27,7 @@ const JsonEditor = ({
   error,
   helperText,
   invalidJsonHelperText,
+  wrapperClass,
 }) => {
   const classes = useStyles();
   const [textValue, setTextValue] = useState('{}');
@@ -45,7 +46,7 @@ const JsonEditor = ({
     } catch (err) {}
   }, [value, textValue, setTextValue]);
 
-  const handleChange = evt => {
+  const handleChange = (evt) => {
     setTextValue(evt.target.value);
     setLocalError(false);
     try {
@@ -56,7 +57,7 @@ const JsonEditor = ({
   };
 
   const prettifyJson = () =>
-    setTextValue(value => JSON.stringify(JSON.parse(value), null, 2));
+    setTextValue((value) => JSON.stringify(JSON.parse(value), null, 2));
 
   let localHelperText = null;
   if (localError) {
@@ -66,13 +67,13 @@ const JsonEditor = ({
   }
 
   return (
-    <div className={classes.wrapper}>
+    <div className={[classes.wrapper, wrapperClass].join(' ')}>
       <TextField
         multiline
         fullWidth
         label={label}
-        rows={rows}
-        rowsMax={maxRows || rows}
+        minRows={rows}
+        maxRows={maxRows || rows}
         error={error || localError}
         helperText={localHelperText}
         value={textValue}
@@ -105,6 +106,7 @@ JsonEditor.propTypes = {
   invalidJsonHelperText: PropTypes.string,
   rows: PropTypes.number,
   maxRows: PropTypes.number,
+  wrapperClass: PropTypes.string,
 };
 
 JsonEditor.defaultProps = {
@@ -113,6 +115,7 @@ JsonEditor.defaultProps = {
   invalidJsonHelperText: 'Invalid JSON',
   rows: 1,
   maxRows: 10,
+  wrapperClass: '',
 };
 
 export default JsonEditor;
