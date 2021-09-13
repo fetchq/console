@@ -55,11 +55,12 @@ const DocumentCreateForm = ({ onSubmit, onCancel }) => {
           {state.usePush && (
             <TextField
               fullWidth
-              id="doc-subject"
               margin="normal"
               label="Subject"
               variant="outlined"
               size="small"
+              value={state.subject}
+              onChange={(evt) => state.setSubject(evt.target.value)}
             />
           )}
           <JsonEditor

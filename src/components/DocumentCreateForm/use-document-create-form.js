@@ -2,11 +2,17 @@ import { useState } from 'react';
 
 const useDocumentCreateForm = (onSubmit, onCancel) => {
   const [useAppend, setUseAppend] = useState(false);
+  const [subject, setSubject] = useState('');
   const [payload, setPayload] = useState({});
 
   const isDismissable = !!onCancel;
   const usePush = !useAppend;
   const toggleMode = () => setUseAppend(!useAppend);
+
+  const resetValues = () => {
+    setSubject('');
+    setPayload({});
+  };
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
@@ -15,16 +21,17 @@ const useDocumentCreateForm = (onSubmit, onCancel) => {
     const data = useAppend
       ? {
           mode: 'append',
-          payload: payload.value,
+          payload,
         }
       : {
           mode: 'push',
-          subject: evt.target['doc-subject'].value,
-          payload: payload,
+          subject,
+          payload,
         };
 
     try {
       await onSubmit(data);
+      resetValues();
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -32,7 +39,7 @@ const useDocumentCreateForm = (onSubmit, onCancel) => {
   };
 
   const handleDismiss = () => {
-    setPayload({});
+    resetValues();
     onCancel();
   };
 
@@ -40,10 +47,11 @@ const useDocumentCreateForm = (onSubmit, onCancel) => {
     useAppend,
     usePush,
     isDismissable,
+    subject,
     payload,
     toggleMode,
-    setUseAppend,
     setPayload,
+    setSubject,
     handleSubmit,
     handleDismiss,
   };
