@@ -11,6 +11,7 @@ import AppLayout from '../layouts/AppLayout';
 import QueueDetailsInfo from '../components/QueueDetailsInfo';
 import QueueDocsView from './QueueDocsView';
 import QueueLogsView from './QueueLogsView';
+import DocumentCreateView from './DocumentCreateView';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,9 +34,8 @@ const QueueDetailsView = ({
 }) => {
   const history = useHistory();
   const classes = useStyles();
-  const { queue, metrics, hasData, reload, ...info } = useQueueDetails(
-    queueName,
-  );
+  const { queue, metrics, hasData, reload, ...info } =
+    useQueueDetails(queueName);
   const { drop } = useQueueDrop({
     onSuccess: () => history.push('/'),
     onError: (err) => alert(err.message),
@@ -98,6 +98,12 @@ const QueueDetailsView = ({
             label="Logs"
             onClick={linkTo('logs')}
           />
+          <Tab
+            value={'create'}
+            component="a"
+            label="Add Document"
+            onClick={linkTo('create')}
+          />
         </Tabs>
         <div className={classes.panels}>
           <Switch>
@@ -127,6 +133,11 @@ const QueueDetailsView = ({
               exact
               path="/queues/:queueName/logs"
               component={QueueLogsView}
+            />
+            <Route
+              exact
+              path="/queues/:queueName/create"
+              component={DocumentCreateView}
             />
           </Switch>
         </div>

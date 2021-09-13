@@ -1,29 +1,24 @@
 import { useState } from 'react';
 import { useAxios } from './use-axios';
 
-export const useDocumentCreate = (queueName) => {
-  const [open, setOpen] = useState(false);
+export const useDocumentCreate = ({
+  queueName,
+  onDocumentCreated = () => {},
+  onFormCanceled = () => {},
+}) => {
   const { called, loading, data, error, ...axios } = useAxios();
 
-  const openDialog = () => setOpen(true);
-  const onCancel = () => setOpen(false);
-
+  const onCancel = () => onFormCanceled();
   const onSubmit = async (data) => {
     const res = await axios.post(`/api/v1/queues/${queueName}/docs`, {
       subject: data.subject,
     });
 
-    console.log('input:', data);
-    console.log('output:', res.data);
-
-    alert('The document was correctly added into the queue!');
-    setOpen(false);
+    onDocumentCreated(res.data.data);
   };
 
   return {
-    open,
     onSubmit,
     onCancel,
-    openDialog,
   };
 };
