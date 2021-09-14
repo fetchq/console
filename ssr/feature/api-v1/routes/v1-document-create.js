@@ -11,10 +11,11 @@ const v1DocumentCreate = {
     try {
       const { queue } = params;
       const { subject } = body;
+      const payload = JSON.stringify(body.payload).replace(/'/g, "''''");
 
       const _sqlPush = subject
-        ? `SELECT * FROM "fetchq"."doc_push"('${queue}', '${subject}');`
-        : `SELECT * FROM "fetchq"."doc_append"('${queue}', '{}');`;
+        ? `SELECT * FROM "fetchq"."doc_push"('${queue}', '${subject}', 0, 0, NOW(), '${payload}');`
+        : `SELECT * FROM "fetchq"."doc_append"('${queue}', '${payload}');`;
       const resPush = await fetchq.pool.query(_sqlPush);
 
       // Get the new document

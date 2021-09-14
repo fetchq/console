@@ -14,7 +14,7 @@ module.exports = {
       next_iteration: { type: 'string', default: '' },
       priority: { type: 'string', default: 0 },
       version: { type: 'string', default: 0 },
-      payload: { type: 'object', additionalProperties: true },
+      payload: { type: 'object', additionalProperties: true, default: {} },
     },
     additionalProperties: false,
   },
