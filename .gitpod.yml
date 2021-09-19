@@ -31,17 +31,17 @@ tasks:
     openIn: bottom
     openMode: split-right
 
-# ports:
-#   - port: 5432
-#     onOpen: ignore
-#   - port: 8008
-#     onOpen: ignore
-#   - port: 8080
-#     onOpen: ignore
-#   - port: 3000
-#     onOpen: ignore
-#   - port: 6060
-#     onOpen: ignore
+ports:
+  - port: 5432
+    onOpen: ignore
+  - port: 8008
+    onOpen: ignore
+  - port: 8080
+    onOpen: ignore
+  - port: 3000
+    onOpen: ignore
+  - port: 6060
+    onOpen: ignore
 
 vscode:
   extensions:
