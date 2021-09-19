@@ -13,13 +13,14 @@ Just click on the following link to have your App up and running in a few minute
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/fetchq/console/tree/main)
 
-## Cloud Development
+## Contribute in GitPod
 
-Do you want to contribute?  
+🤜 Do you want to contribute?  
 Wait no more: GitPod lets you run the entire development environment from your browser.  
 **FOR FREE**.
 
-Just click on the following button and have fun hacking the Console around. Don't forget to open a PR when you are happy with your work 😎.
+Just click on the following button and have fun hacking the Console around.  
+And don't forget to **open a Pull Request** when you are happy with your work 😎.
 
 [![Open in GitPod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#https://github.com/fetchq/console)
 

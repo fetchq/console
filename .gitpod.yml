@@ -18,7 +18,7 @@ tasks:
     openIn: right
     openMode: split-right
   - name: Api
-    init: rm -rf ./.gitpod.lock && npm install && touch ./.gitpod.lock
+    init: rm -rf ./.gitpod.lock && npm install --legacy-peer-deps && npm update --legacy-peer-deps && touch ./.gitpod.lock
     command: HELLO=world
       FETCHQ_CORS_ENABLED=true
       FETCHQ_CORS_ORIGIN=$(gp url 3000)
