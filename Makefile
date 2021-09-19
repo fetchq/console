@@ -44,6 +44,9 @@ stop-styleguide:
 	@humble stop styleguide
 	@humble rm -f styleguide
 
+start-app:
+	@npm run start:app
+
 
 
 boot: install start

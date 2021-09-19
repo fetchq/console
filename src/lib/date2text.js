@@ -18,7 +18,7 @@ const defaults = {
   thresholdMonths: 31449600000, // 364 days
 };
 
-const isToday = someDate => {
+const isToday = (someDate) => {
   const today = new Date();
   return (
     someDate.getDate() === today.getDate() &&
@@ -30,7 +30,7 @@ const isToday = someDate => {
 const date2text = (
   date,
   {
-    translate: t = s => s,
+    translate: t = (s) => s,
     formatShortDate = ({ YYYY, MM, DD, hh, mm }) => `${MM}/${DD}, ${hh}:${mm}`,
     formatFullDate = ({ YYYY, MM, DD, hh, mm }) =>
       `${MM}/${DD}/${YYYY}, ${hh}:${mm}`,
@@ -47,8 +47,14 @@ const date2text = (
   const diff = date - new Date();
   const absDiff = Math.abs(diff);
 
+  // The "now"
   if (absDiff <= thesholdNow) {
     return t('now');
+  }
+
+  // The "beginnin of time"
+  if (diff < -63767364011000) {
+    return 'asap';
   }
 
   if (absDiff <= thresholdSeconds) {
@@ -81,15 +87,9 @@ const date2text = (
     return `${t('an hour ago')}`;
   }
 
-  const hh = date
-    .getHours()
-    .toString()
-    .padStart(2, '0');
+  const hh = date.getHours().toString().padStart(2, '0');
 
-  const mm = date
-    .getMinutes()
-    .toString()
-    .padStart(2, '0');
+  const mm = date.getMinutes().toString().padStart(2, '0');
 
   if (absDiff <= thresholdHours) {
     if (isToday(date) || diff >= 0) {
@@ -100,10 +100,7 @@ const date2text = (
 
   const YYYY = date.getFullYear();
   const MM = (date.getMonth() + 1).toString().padStart(2, '0');
-  const DD = date
-    .getDate()
-    .toString()
-    .padStart(2, '0');
+  const DD = date.getDate().toString().padStart(2, '0');
 
   return formatFullDate({
     date,

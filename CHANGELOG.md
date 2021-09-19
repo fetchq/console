@@ -8,7 +8,7 @@
 - Update NodeJS dependencies
 - Added a customizable scope to the _JWT claims_
 - Updates E2E tests using latest ForrestJS best practices
-- [wip] Create a new document
+- Create a new document
 
 ## v0.0.7
 

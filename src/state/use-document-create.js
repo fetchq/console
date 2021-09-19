@@ -12,6 +12,7 @@ export const useDocumentCreate = ({
   const onSubmit = async (data) => {
     const res = await axios.post(`/api/v1/queues/${queueName}/docs`, {
       subject: data.subject,
+      next_iteration: data.next_iteration,
       payload: data.payload,
     });
 

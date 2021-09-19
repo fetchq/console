@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 const useDocumentCreateForm = (onSubmit, onCancel) => {
-  const [useAppend, setUseAppend] = useState(false);
+  const [useAppend, setUseAppend] = useState(true);
   const [subject, setSubject] = useState('');
+  const [nextIteration, setNextIteration] = useState('');
   const [payload, setPayload] = useState({});
 
   const isDismissable = !!onCancel;
@@ -26,6 +27,7 @@ const useDocumentCreateForm = (onSubmit, onCancel) => {
       : {
           mode: 'push',
           subject,
+          next_iteration: nextIteration,
           payload,
         };
 
@@ -48,10 +50,12 @@ const useDocumentCreateForm = (onSubmit, onCancel) => {
     usePush,
     isDismissable,
     subject,
+    nextIteration,
     payload,
     toggleMode,
-    setPayload,
     setSubject,
+    setNextIteration,
+    setPayload,
     handleSubmit,
     handleDismiss,
   };
